@@ -301,6 +301,7 @@ window.Views['take-quiz'] = {
     const today = AdaptivePrep.todayKey();
     return this.dashboard.adaptive_prep.week_plan.find(row =>
       String(row.day).toLowerCase() !== today &&
+      row.status !== 'complete' &&
       topics.has(String(row.topic).toLowerCase()) &&
       !(AdaptivePrep.read().completed_days || []).includes(String(row.day).toLowerCase())
     ) || null;
