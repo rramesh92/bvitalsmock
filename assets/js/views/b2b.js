@@ -133,7 +133,7 @@ window.Views.b2b = {
       </div>
       ${sharing ? `<div class="panel-card mt-16" style="padding:12px 16px">
         <b style="color:var(--navy-900)">${H.esc(ap.opted_in_student.name)}</b>
-        <div class="muted">Daily session: ${H.esc(ap.opted_in_student.daily_session_status)} · Friday Checkpoint: ${ap.opted_in_student.friday_checkpoint_score}% · Confidence calibration: +${ap.opted_in_student.confidence_calibration_change}%</div>
+        <div class="muted">Daily session: ${H.esc(ap.opted_in_student.daily_session_status)} · Friday Checkpoint: ${ap.opted_in_student.friday_checkpoint_score}%</div>
         <div class="muted">${H.esc(ap.opted_in_student.weekly_report_summary)}</div>
       </div>` : `<p class="muted mt-8 mb-0">Individual Adaptive Prep details are hidden because the student has not opted in.</p>`}` : ''}
       <p class="muted mt-8 mb-0">Full class performance report opens in the reports view with aggregate subject activity.</p>`,
