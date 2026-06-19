@@ -1,42 +1,53 @@
 window.Views = window.Views || {};
 window.Views.dashboard = {
   tab: 'quizzes',
-  async render(el) {
+  async render(el, params = []) {
     if (UIState.force === 'loading') { el.innerHTML = loadingLayout(); return; }
     el.innerHTML = loadingLayout();
     let d;
     try { d = await DB.load('dashboard'); }
     catch (e) { el.innerHTML = errorState(e.message); return; }
     if (UIState.force === 'error') { el.innerHTML = errorState('Could not load your dashboard.'); return; }
+    if (params[0] === 'weekly-report') { this.renderWeeklyReport(el, d); return; }
 
-    const sq = d.start_quiz, qs = d.question_status, cme = d.cme_moc;
+    const sq = d.start_quiz, qs = d.question_status, cme = d.cme_moc, ap = d.adaptive_prep || {};
+    const apState = AdaptivePrep.read();
+    const todayComplete = apState.completed_days.includes(AdaptivePrep.todayKey());
+    const checkpointComplete = !!apState.checkpoint_complete;
+    const showUpdatedPlan = params[0] === 'updated-plan';
+    const primaryLabel = !todayComplete ? "Start today's session" : checkpointComplete ? 'View weekly report' : 'Start Friday Checkpoint';
+    const primaryAction = !todayComplete ? 'daily' : checkpointComplete ? 'report' : 'checkpoint';
     const scoreColor = d.score >= 75 ? 'var(--good)' : d.score >= 50 ? 'var(--warn)' : 'var(--risk)';
 
     el.innerHTML = `
       <div class="dash-grid">
 
-        <!-- Start Quiz (col-lg-3) -->
+        <!-- Adaptive Prep Agent entry point (col-lg-3) -->
         <div>
-          <div class="section-label">Start Quiz</div>
+          <div class="section-label">This Week's Plan</div>
           <div class="panel-card">
             <div class="start-block">
-              <h4>Custom Quiz</h4>
-              <p>Select your subjects, number of questions, and more.</p>
-              <a class="btn btn-block" href="#/create-quiz" style="background:var(--info);color:#fff">New Custom Quiz</a>
-            </div>
-            <div class="start-block">
-              <div class="row" style="justify-content:space-between;align-items:center">
-                <h4 style="margin:0">Quick Start Quiz</h4>
-                <button class="btn btn-secondary" id="qs-edit" style="border-color:var(--info);color:var(--info);padding:4px 12px">Edit</button>
+              <div class="between" style="align-items:flex-start;gap:12px">
+                <div>
+                  <h4>${H.esc(ap.week_label || 'Current week')}</h4>
+                  <p>${Icon.target} ${this.topicList(ap.focus_topics || [])}</p>
+                </div>
+                <span class="pill muted">${ap.days_remaining_until_friday} days to Friday Checkpoint</span>
               </div>
-              <p style="margin-top:6px">${H.esc(sq.quick_start.description)}</p>
-              <button class="btn btn-block" id="new_quick_quiz_button_card_button" style="background:var(--info);color:#fff">New Quick Start Quiz</button>
-            </div>
-            <div class="start-block">
-              <h4>At Risk Quiz</h4>
-              <p>${H.esc(sq.at_risk.description)}</p>
-              <button class="btn btn-block ${sq.at_risk.available ? '' : 'disabled'}" id="at-risk-btn"
-                style="background:${sq.at_risk.available ? 'var(--info)' : '#9db8d6'};color:#fff">New At Risk Quiz</button>
+              <p>${H.esc(ap.ai_reason || '')}</p>
+              ${showUpdatedPlan ? `<div class="explanation" style="margin-top:0;margin-bottom:12px">
+                <h4>Updated week plan</h4>
+                <p class="mb-0">${H.esc(ap.replan_notification?.message || '')}</p>
+              </div>` : ''}
+              ${this.masteryCards(d.weak_subjects || [], apState)}
+              <div class="mt-16">
+                <div class="between" style="margin-bottom:8px">
+                  <b style="color:var(--navy-900)">${H.esc(ap.daily_session?.label || "Today's session")}</b>
+                  <span class="pill ${todayComplete ? 'good' : 'muted'}">${todayComplete ? 'Complete' : `${ap.daily_session?.question_count || 0} questions`}</span>
+                </div>
+                ${this.weekPlanRows(ap.week_plan || [], todayComplete, checkpointComplete)}
+              </div>
+              <button class="btn btn-primary btn-block btn-lg mt-16" id="adaptive-primary" data-action="${primaryAction}">${primaryLabel}</button>
             </div>
           </div>
         </div>
@@ -130,15 +141,109 @@ window.Views.dashboard = {
     body();
     el.querySelectorAll('#dash-tabs button').forEach(b => b.onclick = () => { this.tab = b.dataset.t; el.querySelectorAll('#dash-tabs button').forEach(x=>x.classList.toggle('active',x===b)); body(); });
 
-    document.getElementById('new_quick_quiz_button_card_button').onclick = () => { location.hash = '#/take-quiz'; };
-    const qsEdit = document.getElementById('qs-edit');
-    if (qsEdit) qsEdit.onclick = () => { location.hash = '#/create-quiz'; };
-    const atRisk = document.getElementById('at-risk-btn');
-    if (atRisk) atRisk.onclick = () => {
-      if (!sq.at_risk.available) return toast('Not enough data yet for an At Risk quiz');
-      location.hash = '#/take-quiz';
+    const adaptivePrimary = document.getElementById('adaptive-primary');
+    if (adaptivePrimary) adaptivePrimary.onclick = () => {
+      if (adaptivePrimary.dataset.action === 'daily') location.hash = '#/take-quiz/adaptive-daily';
+      else if (adaptivePrimary.dataset.action === 'checkpoint') location.hash = '#/take-quiz/friday-checkpoint';
+      else location.hash = '#/dashboard/weekly-report';
     };
     document.getElementById('cme-upgrade').onclick = () => { location.hash = '#/cme'; };
+    this.maybeShowReplanToast(ap, apState);
+  },
+
+  topicList(topics) {
+    return (topics || []).map(t => H.esc(t)).join(', ');
+  },
+
+  masteryCards(subjects, state) {
+    const delta = state.daily_mastery_delta || 0;
+    return `<div class="grid" style="gap:8px">
+      ${subjects.map(s => {
+        const mastery = Math.min(100, (s.mastery || s.score || 0) + delta);
+        return `<div class="between" style="gap:10px">
+          <span><b style="color:var(--navy-900)">${H.esc(s.subject)}</b><br><small>${H.esc(s.risk_category)}</small></span>
+          <span class="pill ${H.scoreClass(mastery)}">${mastery}% mastery</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  },
+
+  weekPlanRows(rows, todayComplete, checkpointComplete) {
+    const statusClass = (status) => status === 'complete' ? 'good' : status === 'checkpoint' ? 'muted' : 'warn';
+    return `<table class="data"><tbody>${rows.map(r => {
+      let label = r.status;
+      let cls = statusClass(r.status);
+      if (r.day === 'Friday' && todayComplete && !checkpointComplete) { label = 'ready'; cls = 'good'; }
+      if (r.day === 'Friday' && checkpointComplete) { label = 'complete'; cls = 'good'; }
+      return `<tr>
+        <td style="padding:8px 0"><b>${H.esc(r.day)}</b><br><small>${H.esc(r.reason)}</small></td>
+        <td style="padding:8px 0">${H.esc(r.topic)}</td>
+        <td style="padding:8px 0;text-align:right"><span class="pill ${cls}">${H.esc(label)}</span></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  },
+
+  maybeShowReplanToast(ap, state) {
+    if (!ap?.replan_notification || state.replan_seen) return;
+    setTimeout(() => {
+      AdaptivePrep.markReplanSeen();
+      toast(ap.replan_notification.message, '', {
+        duration: 7000,
+        onClick: () => { location.hash = '#/dashboard/updated-plan'; }
+      });
+    }, 400);
+  },
+
+  renderWeeklyReport(el, d) {
+    const ap = d.adaptive_prep || {};
+    const st = AdaptivePrep.read();
+    const report = ap.weekly_report || {};
+    const checkpointScore = st.checkpoint_score == null ? 'Not completed' : `${st.checkpoint_score}%`;
+    const masteryCurrent = Math.max(report.mastery_current_week || 0, (report.mastery_current_week || 0) + (st.daily_mastery_delta || 0));
+    el.innerHTML = `
+      <a href="#/dashboard" class="btn btn-ghost" style="padding-left:0;font-weight:700">&lt; Back to Dashboard</a>
+      <div class="page-head">
+        <div>
+          <h1>Weekly Report</h1>
+          <p class="subtitle">A self-referenced summary of this week's Adaptive Prep work.</p>
+        </div>
+        <span class="pill ${st.checkpoint_complete ? 'good' : 'muted'}">Friday Checkpoint: ${H.esc(checkpointScore)}</span>
+      </div>
+
+      <div class="grid cols-3">
+        <div class="card">
+          <div class="stat">
+            <div class="value good">+${report.mastery_change || 0}%</div>
+            <div class="label">Mastery change vs. your prior week</div>
+          </div>
+          <div class="progress good mt-16"><span style="width:${masteryCurrent}%"></span></div>
+          <small>${report.mastery_prior_week || 0}% last week to ${masteryCurrent}% this week</small>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="value good">+${Math.max(report.confidence_calibration_change || 0, st.confidence_delta || 0)}%</div>
+            <div class="label">Confidence-calibration change</div>
+          </div>
+          <p class="muted mt-16 mb-0">Your confidence ratings are closer to your actual answers than they were last week.</p>
+        </div>
+        <div class="card">
+          <h3>Next week's proposed focus</h3>
+          <div class="q-meta">${(report.next_week_focus || []).map(t => `<span class="pill">${H.esc(t)}</span>`).join('')}</div>
+          <p class="mb-0">${H.esc(report.reason || '')}</p>
+        </div>
+      </div>
+
+      <div class="section-label mt-16">This week's focus topics</div>
+      <div class="panel-card pad-0">
+        <table class="data">
+          <thead><tr><th>Topic</th><th>Start mastery</th><th>Current mastery</th><th>Change</th></tr></thead>
+          <tbody>${(d.weak_subjects || []).map(s => {
+            const now = Math.min(100, (s.mastery || s.score || 0) + (st.daily_mastery_delta || 0));
+            const change = now - (s.mastery || s.score || 0);
+            return `<tr><td><b>${H.esc(s.subject)}</b></td><td>${s.mastery || s.score || 0}%</td><td>${now}%</td><td><span class="pill ${change >= 0 ? 'good' : 'warn'}">${change >= 0 ? '+' : ''}${change}%</span></td></tr>`;
+          }).join('')}</tbody>
+        </table>
+      </div>`;
   }
 };
 

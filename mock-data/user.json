@@ -15,5 +15,6 @@
   "marked_clinical_pearl_ids": [311],
   "last_quiz_types_selected": ["unused", "incorrect"],
   "priority_organization_id": 88,
+  "adaptive_prep_admin_opt_in": false,
   "avatar_initials": "JA"
 }

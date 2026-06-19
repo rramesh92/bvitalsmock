@@ -13,7 +13,8 @@ window.Views.account = {
       ['profile', 'Profile'],
       ['products', 'My Products'],
       ['password', 'Reset Password'],
-      ['cards', 'Credit Cards']
+      ['cards', 'Credit Cards'],
+      ['privacy', 'Privacy & Sharing']
     ];
 
     el.innerHTML = `
@@ -33,7 +34,8 @@ window.Views.account = {
       if (this.tab === 'profile') body.innerHTML = this.profileHtml(u);
       else if (this.tab === 'products') body.innerHTML = this.productsHtml(s);
       else if (this.tab === 'password') body.innerHTML = this.passwordHtml();
-      else body.innerHTML = this.cardsHtml(s);
+      else if (this.tab === 'cards') body.innerHTML = this.cardsHtml(s);
+      else body.innerHTML = this.privacyHtml();
       this.bindBody(body);
     };
     renderBody();
@@ -119,6 +121,25 @@ window.Views.account = {
         : '<p class="muted">No credit card on file</p>'}`;
   },
 
+  privacyHtml() {
+    const st = AdaptivePrep.read();
+    return `<h2 class="settings-h2">Privacy & Sharing</h2>
+      <div class="settings-form">
+        <div class="panel-card" style="padding:16px">
+          <div class="between" style="align-items:flex-start;gap:12px">
+            <div>
+              <h3 class="settings-h3">Share Adaptive Prep details with instructors</h3>
+              <p class="muted mb-0">When this is off, class reports show only aggregate cohort trends. Your daily sessions, Friday Checkpoint score, confidence ratings, and weekly report details stay private.</p>
+            </div>
+            <label class="row" style="gap:8px;font-weight:700;color:var(--navy-900)">
+              <input type="checkbox" id="adaptive-share-toggle" ${st.share_with_admin ? 'checked' : ''}/>
+              ${st.share_with_admin ? 'On' : 'Off'}
+            </label>
+          </div>
+        </div>
+      </div>`;
+  },
+
   bindBody(body) {
     const save = body.querySelector('#profile-save');
     if (save) save.onclick = () => toast('Profile saved', 'success');
@@ -128,6 +149,14 @@ window.Views.account = {
     body.querySelectorAll('[data-editcard]').forEach(b => b.onclick = () => toast('Edit Credit Card form is mocked'));
     body.querySelectorAll('[data-rmcard]').forEach(b => b.onclick = () => toast(`Remove card ending in ${b.dataset.rmcard} is mocked`));
     body.querySelectorAll('[data-bxd]').forEach(b => b.onchange = () => toast('Board exam date saved', 'success'));
+    const share = body.querySelector('#adaptive-share-toggle');
+    if (share) share.onchange = () => {
+      AdaptivePrep.setShareWithAdmin(share.checked);
+      toast(share.checked ? 'Adaptive Prep sharing is on' : 'Adaptive Prep sharing is off', 'success');
+      this.tab = 'privacy';
+      const root = document.getElementById('view-content');
+      if (root) this.render(root);
+    };
   }
 };
 

@@ -14,6 +14,48 @@
     { "category": "At Risk", "percent": 0, "color": "risk" },
     { "category": "Not Enough Data", "percent": 100, "color": "muted" }
   ],
+  "weak_subjects": [
+    { "subject": "Nephrology", "risk_category": "At Risk", "score": 58, "mastery": 58 },
+    { "subject": "Cardiology", "risk_category": "At Risk", "score": 62, "mastery": 62 },
+    { "subject": "Hematology/Oncology", "risk_category": "Needs Improvement", "score": 60, "mastery": 60 }
+  ],
+  "adaptive_prep": {
+    "week_label": "Week of Jun 15",
+    "days_remaining_until_friday": 0,
+    "focus_topics": ["Nephrology", "Cardiology", "Hematology/Oncology"],
+    "ai_reason": "Nephrology and Cardiology are the lowest current mastery areas, with Hematology/Oncology close behind.",
+    "daily_session": {
+      "label": "Today's session",
+      "question_count": 3,
+      "topics": ["Nephrology", "Cardiology", "Hematology/Oncology"]
+    },
+    "week_plan": [
+      { "day": "Monday", "topic": "Cardiology", "status": "complete", "reason": "Start with the highest-volume At Risk topic." },
+      { "day": "Tuesday", "topic": "Hematology/Oncology", "status": "complete", "reason": "Reinforce a Needs Improvement topic before the midpoint." },
+      { "day": "Wednesday", "topic": "Nephrology", "status": "planned", "reason": "Moved here after Cardiology mastery rose early." },
+      { "day": "Thursday", "topic": "Mixed weak-topic review", "status": "planned", "reason": "Combine remaining misses before the Friday Checkpoint." },
+      { "day": "Friday", "topic": "Friday Checkpoint", "status": "checkpoint", "reason": "Check this week's focus topics only." }
+    ],
+    "replan_notification": {
+      "message": "Moved Wednesday's session from Cardiology to Nephrology — you hit 85% on Cardiology two days early",
+      "updated_day": "Wednesday",
+      "from_topic": "Cardiology",
+      "to_topic": "Nephrology",
+      "why": "you hit 85% on Cardiology two days early"
+    },
+    "friday_checkpoint": {
+      "label": "Friday Checkpoint",
+      "topics": ["Nephrology", "Cardiology", "Hematology/Oncology"]
+    },
+    "weekly_report": {
+      "mastery_change": 7,
+      "mastery_prior_week": 58,
+      "mastery_current_week": 65,
+      "confidence_calibration_change": 6,
+      "next_week_focus": ["Nephrology", "Infectious Disease"],
+      "reason": "Nephrology still has the lowest mastery after this week's work, and Infectious Disease is the next lowest Needs Improvement area."
+    }
+  },
   "cme_moc": { "type": "AMA PRA Category 1™", "earned": 0, "available": 40, "claimed": 0 },
   "quizzes": [],
   "assignments": [

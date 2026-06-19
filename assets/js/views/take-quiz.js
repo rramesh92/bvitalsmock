@@ -1,8 +1,8 @@
 window.Views = window.Views || {};
 window.Views['take-quiz'] = {
-  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null,
+  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null, mode: '',
 
-  async render(el) {
+  async render(el, params = []) {
     if (!document.getElementById('css-take-quiz')) {
       const s = document.createElement('style'); s.id = 'css-take-quiz';
       s.textContent = `
@@ -46,13 +46,48 @@ window.Views['take-quiz'] = {
     }
 
     el.innerHTML = `<div class="quiz-shell">${skeleton(6)}</div>`;
-    try { this.quiz = await DB.load('quiz'); }
+    try {
+      const baseQuiz = await DB.load('quiz');
+      const dashboard = await DB.load('dashboard');
+      this.mode = params[0] || '';
+      this.quiz = this.buildQuiz(baseQuiz, dashboard);
+    }
     catch (e) { el.innerHTML = errorState(e.message); return; }
     this.idx = 0; this.answers = {}; this.graded = {}; this.showExp = {}; this.struck = {}; this.ngn = {}; this.tool = 'none';
-    this.openBook = this.quiz.type === 'tutor' || this.quiz.type === 'study';
+    this.checkpointMode = this.mode === 'friday-checkpoint';
+    this.openBook = !this.checkpointMode && (this.quiz.type === 'tutor' || this.quiz.type === 'study');
     this.quiz.questions.forEach(q => { this.marked[q.id] = q.marked; });
     this.startTimer();
     this.paint(el);
+  },
+
+  buildQuiz(baseQuiz, dashboard) {
+    const quiz = JSON.parse(JSON.stringify(baseQuiz));
+    const ap = dashboard.adaptive_prep || {};
+    if (this.mode === 'adaptive-daily') {
+      const topics = ap.daily_session?.topics || ap.focus_topics || [];
+      quiz.name = "Today's Adaptive Prep Session";
+      quiz.type = 'tutor';
+      quiz.tutor_mode = true;
+      quiz.timed = false;
+      quiz.questions = this.scopedQuestions(quiz.questions, topics, ap.daily_session?.question_count || 3);
+    } else if (this.mode === 'friday-checkpoint') {
+      const topics = ap.friday_checkpoint?.topics || ap.focus_topics || [];
+      quiz.name = 'Friday Checkpoint';
+      quiz.type = 'friday-checkpoint';
+      quiz.tutor_mode = false;
+      quiz.timed = false;
+      quiz.questions = this.scopedQuestions(quiz.questions, topics, topics.length || 3);
+    }
+    quiz.total_questions = quiz.questions.length;
+    quiz.questions.forEach((q, i) => { q.number = i + 1; });
+    return quiz;
+  },
+
+  scopedQuestions(questions, topics, limit) {
+    const wanted = new Set((topics || []).map(t => String(t).toLowerCase()));
+    const matches = questions.filter(q => wanted.has(String(q.subject).toLowerCase()));
+    return (matches.length ? matches : questions).slice(0, limit);
   },
 
   startTimer() {
@@ -260,7 +295,7 @@ window.Views['take-quiz'] = {
       }
       if (this.graded[q.id] && this.openBook) return; // locked after grading in open-book mode
       this.answers[q.id] = aid;
-      if (!this.openBook) this.graded[q.id] = true; // closed-book: immediate feedback
+      if (!this.openBook && !this.checkpointMode) this.graded[q.id] = true; // closed-book: immediate feedback
       this.paint(el);
     });
 
@@ -322,13 +357,35 @@ window.Views['take-quiz'] = {
   },
 
   gradeModal() {
+    const score = this.score();
+    const adaptiveDaily = this.mode === 'adaptive-daily';
+    const fridayCheckpoint = this.mode === 'friday-checkpoint';
     openModal({
       title: this.quiz.name,
-      body: `<p>The Quiz has been completed. Submit to see your results.</p>`,
-      confirmLabel: 'Submit',
-      onConfirm: () => { clearInterval(this.timer); location.hash = '#/results/' + this.quiz.id; }
+      body: `<p>${adaptiveDaily ? "Today's session is complete. Return to Dashboard to update your plan." : fridayCheckpoint ? 'Friday Checkpoint is complete. Continue to your weekly report.' : 'The Quiz has been completed. Submit to see your results.'}</p>`,
+      confirmLabel: adaptiveDaily ? 'Return to Dashboard' : fridayCheckpoint ? 'View Weekly Report' : 'Submit',
+      onConfirm: () => {
+        clearInterval(this.timer);
+        if (adaptiveDaily) {
+          AdaptivePrep.markDailyComplete(score);
+          toast("Today's session complete", 'success');
+          location.hash = '#/dashboard';
+        } else if (fridayCheckpoint) {
+          AdaptivePrep.markCheckpointComplete(score);
+          location.hash = '#/dashboard/weekly-report';
+        } else {
+          location.hash = '#/results/' + this.quiz.id;
+        }
+      }
     });
     // align with the maestro element id for the modal confirm
     document.getElementById('modal-ok').id = 'grade_quiz_modal_grade_quiz_button';
+  },
+
+  score() {
+    if (!this.quiz || !this.quiz.questions.length) return 0;
+    let correct = 0;
+    this.quiz.questions.forEach(q => { if (this.gradedState(q) === 'Correct') correct++; });
+    return Math.round((correct / this.quiz.questions.length) * 100);
   }
 };
