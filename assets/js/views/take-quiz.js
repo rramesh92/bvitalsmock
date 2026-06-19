@@ -10,6 +10,7 @@ window.Views['take-quiz'] = {
         .tq-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
         .tq-title .name{font-weight:700;font-size:15px}
         .tq-title .count{font-size:13px;color:#cdd8e2}
+        .tq-scope{border:1px solid var(--line);border-top:0;background:var(--teal-050);padding:12px 16px;color:var(--navy-900);font-weight:600}
         .tq-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
         .tq-tool{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:6px;padding:5px 11px;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
         .tq-tool.active{background:#fff;color:var(--navy-900);border-color:#fff}
@@ -73,10 +74,13 @@ window.Views['take-quiz'] = {
       quiz.questions = this.scopedQuestions(quiz.questions, topics, ap.daily_session?.question_count || 3);
     } else if (this.mode === 'friday-checkpoint') {
       const topics = ap.friday_checkpoint?.topics || ap.focus_topics || [];
+      const fridayPlan = (ap.week_plan || []).find(day => day.day === 'Friday') || {};
       quiz.name = 'Friday Checkpoint';
       quiz.type = 'friday-checkpoint';
       quiz.tutor_mode = false;
       quiz.timed = false;
+      quiz.scope_topics = topics;
+      quiz.scope_reason = fridayPlan.reason || ap.ai_reason || '';
       quiz.questions = this.scopedQuestions(quiz.questions, topics, topics.length || 3);
     }
     quiz.total_questions = quiz.questions.length;
@@ -157,7 +161,7 @@ window.Views['take-quiz'] = {
       <div class="quiz-shell">
         <div class="tq-header">
           <div class="tq-title">
-            <span class="name">${H.esc(this.quiz.name)}</span>
+            <span class="name">${H.esc(this.quiz.name)} ${this.checkpointMode ? "<span class=\"pill\">This week's plan</span>" : ''}</span>
             <span class="count">${q.number} of ${total} questions · <span id="quiz-timer">${H.mmss(this.seconds)}</span></span>
           </div>
           <div class="tq-tools">
@@ -176,6 +180,8 @@ window.Views['take-quiz'] = {
           <span>Review Mode</span>
           <button class="btn btn-secondary" id="back-to-results" style="padding:4px 12px">Back To Results</button>
         </div>` : ''}
+
+        ${this.checkpointMode ? `<div class="tq-scope">This checkpoint covers this week's focus: ${H.esc((this.quiz.scope_topics || []).join(', '))}${this.quiz.scope_reason ? ` — ${H.esc(this.quiz.scope_reason)}` : ''}</div>` : ''}
 
         <div class="card" style="border-radius:0 0 8px 8px">
           <div class="between">

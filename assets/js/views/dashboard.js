@@ -15,7 +15,7 @@ window.Views.dashboard = {
     const todayComplete = apState.completed_days.includes(AdaptivePrep.todayKey());
     const checkpointComplete = !!apState.checkpoint_complete;
     const showUpdatedPlan = params[0] === 'updated-plan';
-    const primaryLabel = !todayComplete ? "Start today's session" : checkpointComplete ? 'View weekly report' : 'Start Friday Checkpoint';
+    const primaryLabel = !todayComplete ? "Start today's session" : checkpointComplete ? 'View Weekly Report' : 'Start Friday Checkpoint';
     const primaryAction = !todayComplete ? 'daily' : checkpointComplete ? 'report' : 'checkpoint';
     const scoreColor = d.score >= 75 ? 'var(--good)' : d.score >= 50 ? 'var(--warn)' : 'var(--risk)';
 
@@ -63,13 +63,13 @@ window.Views.dashboard = {
                     <div class="hole" style="width:96px;height:96px"><div><small class="muted">Score</small><div class="big">${d.score}%</div></div></div>
                   </div>
                 </div>
-                <div class="pc">
+                ${apState.share_with_admin ? `<div class="pc">
                   <div class="peer-curve" style="margin:0 auto">${bellCurve(d.peer_rank_percentile)}</div>
                   <div style="margin-top:6px"><b>Peer Rank</b>
                     <span style="font-size:26px;font-weight:700;color:var(--navy-900);margin-left:6px">${d.peer_rank_percentile}<sup style="font-size:13px">th</sup></span>
                     <div><small class="muted" style="font-style:italic">Percentile</small></div>
                   </div>
-                </div>
+                </div>` : ''}
                 <div class="pc">
                   <div style="font-weight:700;color:var(--navy-800);font-size:13px;margin-bottom:8px">
                     Subject Risk Distribution <span class="muted" title="How your subjects are distributed by readiness">(?)</span></div>
