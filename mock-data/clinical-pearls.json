@@ -1,0 +1,14 @@
+{
+  "question_bank_id": 12,
+  "categories": ["Cardiology", "Pulmonology", "Nephrology", "Gastroenterology", "Endocrinology", "Infectious Disease", "Hematology/Oncology"],
+  "pearls": [
+    { "id": 311, "pearl": "Use MUDPILES to recall causes of anion gap metabolic acidosis: Methanol, Uremia, DKA, Propylene glycol, Iron/INH, Lactic acidosis, Ethylene glycol, Salicylates.", "categories": ["Nephrology"], "marked": true },
+    { "id": 312, "pearl": "Light's Criteria: a pleural effusion is exudative if any one of pleural/serum protein >0.5, pleural/serum LDH >0.6, or pleural LDH >2/3 the upper limit of normal serum LDH.", "categories": ["Pulmonology"], "marked": false },
+    { "id": 313, "pearl": "CHA2DS2-VASc score ≥2 in men / ≥3 in women generally warrants anticoagulation in non-valvular atrial fibrillation for stroke risk reduction.", "categories": ["Cardiology"], "marked": false },
+    { "id": 314, "pearl": "Ranson's Criteria predicts severity of acute pancreatitis at admission and 48 hours; higher scores correlate with increased mortality.", "categories": ["Gastroenterology"], "marked": false },
+    { "id": 315, "pearl": "In DKA, give IV fluids and insulin but hold insulin until potassium is ≥3.3 mEq/L to avoid life-threatening hypokalemia.", "categories": ["Endocrinology", "Nephrology"], "marked": true },
+    { "id": 316, "pearl": "The CURB-65 score (Confusion, Urea, Respiratory rate, Blood pressure, age ≥65) guides admission decisions in community-acquired pneumonia.", "categories": ["Pulmonology", "Infectious Disease"], "marked": false },
+    { "id": 317, "pearl": "Smudge cells on peripheral smear are characteristic of chronic lymphocytic leukemia (CLL).", "categories": ["Hematology/Oncology"], "marked": false },
+    { "id": 318, "pearl": "Troponin rises 3–4 hours after myocardial injury, peaks at 24 hours, and remains elevated up to 1–2 weeks.", "categories": ["Cardiology"], "marked": false }
+  ]
+}

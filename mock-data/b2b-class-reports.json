@@ -1,0 +1,28 @@
+{
+  "member_group": "PGY-1 Cohort 2026",
+  "organization": "Riverside Internal Medicine Residency",
+  "question_bank": "ABIM Internal Medicine",
+  "start_date": "2026-03-16",
+  "end_date": "2026-06-16",
+  "generated_on": "2026-06-16",
+  "performance": {
+    "class": { "average_score": 64, "median_score": 66, "peer_rank": 41 },
+    "organization": { "average_score": 68, "median_score": 70, "peer_rank": 52 },
+    "national": { "average_score": 65, "median_score": 67, "peer_rank": 50 }
+  },
+  "summary": { "recipients": 24, "questions_answered": 12840, "completion_rate": 58 },
+  "by_subject": [
+    { "subject": "Cardiology", "num_questions": 2860, "percent_correct": 61, "national_percent": 65, "avg_response_time": "1:18" },
+    { "subject": "Pulmonology", "num_questions": 1740, "percent_correct": 70, "national_percent": 69, "avg_response_time": "1:05" },
+    { "subject": "Nephrology", "num_questions": 1520, "percent_correct": 55, "national_percent": 63, "avg_response_time": "1:32" },
+    { "subject": "Endocrinology", "num_questions": 1180, "percent_correct": 73, "national_percent": 71, "avg_response_time": "0:58" },
+    { "subject": "Infectious Disease", "num_questions": 1640, "percent_correct": 67, "national_percent": 66, "avg_response_time": "1:11" }
+  ],
+  "leaderboard": [
+    { "rank": 1, "first_name": "Daniel", "last_name": "Okafor", "percent_correct": 74, "questions_answered": 720 },
+    { "rank": 2, "first_name": "Jordan", "last_name": "Avery", "percent_correct": 71, "questions_answered": 642 },
+    { "rank": 3, "first_name": "Mia", "last_name": "Chen", "percent_correct": 68, "questions_answered": 540 },
+    { "rank": 4, "first_name": "Samuel", "last_name": "Reyes", "percent_correct": 66, "questions_answered": 488 },
+    { "rank": 5, "first_name": "Riya", "last_name": "Patel", "percent_correct": 59, "questions_answered": 310 }
+  ]
+}

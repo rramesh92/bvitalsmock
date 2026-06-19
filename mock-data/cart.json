@@ -1,0 +1,43 @@
+{
+  "currency": "USD",
+  "items": [
+    {
+      "id": 5001,
+      "question_bank": "Internal Medicine Board Review",
+      "plan": "Prepare",
+      "months": 6,
+      "duration_label": "6 Months",
+      "qty": 1,
+      "price": 349,
+      "original_price": 399,
+      "cme": false
+    },
+    {
+      "id": 5002,
+      "question_bank": "Cardiology Board Review",
+      "plan": "Master",
+      "months": 3,
+      "duration_label": "3 Months",
+      "qty": 1,
+      "price": 199,
+      "original_price": 249,
+      "cme": true,
+      "cme_label": "CME Certificate · 40 AMA PRA Category 1 Credits"
+    },
+    {
+      "id": 5003,
+      "question_bank": "USMLE Step 2 CK Qbank",
+      "plan": "Essential",
+      "months": 1,
+      "duration_label": "1 Month",
+      "qty": 1,
+      "price": 99,
+      "original_price": 99,
+      "cme": false
+    }
+  ],
+  "subtotal": 647,
+  "discount": 100,
+  "tax": 0,
+  "total": 547
+}

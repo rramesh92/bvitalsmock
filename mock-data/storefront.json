@@ -1,0 +1,34 @@
+{
+  "occupations": ["Physician", "Physician Assistant", "Nurse Practitioner", "Nurse", "Medical Student", "Podiatrist", "Dentist"],
+  "spec_tabs": {
+    "INITIAL CERTIFICATION": ["Addiction Medicine", "Anesthesiology ADVANCED", "Cardiology", "Child Neurology", "Dermatology", "Emergency Medicine", "Family Medicine", "Gastroenterology", "Internal Medicine", "Nephrology", "Neurology", "OBGYN", "Pediatrics", "Psychiatry", "Pulmonary and Critical Care", "Radiology Core", "Surgery", "Urology"],
+    "RECERTIFICATION": ["Internal Medicine MOC", "Cardiology MOC", "Family Medicine MOC", "Pediatrics MOC"],
+    "CME": ["Internal Medicine CME", "Cardiology CME", "Emergency Medicine CME", "Psychiatry CME"],
+    "NURSING": ["NCLEX-RN", "NCLEX-PN", "Nurse Practitioner (FNP)", "AANP", "ANCC"],
+    "MEDICAL STUDENTS": ["USMLE Step 1", "USMLE Step 2 CK", "USMLE Step 3", "COMLEX"],
+    "PODIATRY": ["ABFAS", "APMLE Part 1", "APMLE Part 2"],
+    "OTHER": ["PANCE / PANRE", "Pharmacy", "Dental (INBDE)"]
+  },
+  "product": {
+    "specialty": "Cardiology",
+    "breadcrumb": ["Home", "Initial Certification", "Cardiology"],
+    "title": "Cardiology Board Review Questions and Answers",
+    "blurb": "Get ready to pass the Cardiovascular Disease Certification Exam with BoardVitals. Gain access to more than 1,450 Cardiology board review practice questions with detailed explanations for both correct and incorrect answers, following the ABIM Cardiovascular Disease Certification Exam blueprint.",
+    "plans": [
+      { "name": "Master", "duration": "6 Months", "price": 479, "save": "Save 57%", "best": true, "free": false },
+      { "name": "Prepare", "duration": "3 Months", "price": 309, "save": "Save 46%", "best": false, "free": false },
+      { "name": "Cram", "duration": "1 Month", "price": 189, "save": "", "best": false, "free": false },
+      { "name": "Free Trial", "duration": "", "price": 0, "save": "No credit card required", "best": false, "free": true }
+    ],
+    "features": [
+      { "label": "Most Up-to-Date Board Review Questions", "values": ["1450+ Questions", "1450+ Questions", "1450+ Questions", "Free access to select questions"] },
+      { "label": "Detailed Explanations and Rationales", "values": [true, true, true, true] },
+      { "label": "Targeted to ABIM Exam Blueprint", "values": [true, true, true, true] },
+      { "label": "Mobile App to Study On-The-Go", "values": [true, true, true, true] },
+      { "label": "Adaptive Learning Technology", "values": [true, true, true, false] },
+      { "label": "Full-Length Practice Exam Simulation", "values": [true, true, false, false] },
+      { "label": "Performance Analytics & Peer Ranking", "values": [true, true, true, false] },
+      { "label": "100% Pass Guarantee", "values": [true, true, false, false] }
+    ]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "total": 12,
+  "facets": {
+    "subjects": [
+      { "name": "Cardiology", "count": 3 },
+      { "name": "Pulmonology", "count": 2 },
+      { "name": "Nephrology", "count": 2 },
+      { "name": "Endocrinology", "count": 2 },
+      { "name": "Infectious Disease", "count": 2 },
+      { "name": "Neurology", "count": 1 }
+    ],
+    "status": [
+      { "name": "unused", "count": 5 },
+      { "name": "correct", "count": 3 },
+      { "name": "incorrect", "count": 2 },
+      { "name": "marked", "count": 2 }
+    ]
+  },
+  "questions": [
+    {
+      "id": 100231,
+      "stem": "A 58-year-old man presents with crushing subst, retrosternal chest pain radiating to the left arm for 40 minutes.",
+      "lead_in": "Which initial ECG finding is most consistent with an acute anterior STEMI?",
+      "subject": "Cardiology",
+      "difficulty": "Medium",
+      "status": "incorrect",
+      "marked": false
+    },
+    {
+      "id": 100232,
+      "stem": "A 24-year-old woman with palpitations has a narrow-complex regular tachycardia at 180 bpm that terminates with vagal maneuvers.",
+      "lead_in": "What is the most likely underlying mechanism?",
+      "subject": "Cardiology",
+      "difficulty": "Hard",
+      "status": "unused",
+      "marked": true
+    },
+    {
+      "id": 100233,
+      "stem": "A 67-year-old with reduced ejection fraction and persistent dyspnea despite an ACE inhibitor and beta-blocker.",
+      "lead_in": "Which medication is most appropriate to add to reduce mortality?",
+      "subject": "Cardiology",
+      "difficulty": "Medium",
+      "status": "correct",
+      "marked": false
+    },
+    {
+      "id": 100234,
+      "stem": "A 45-year-old smoker reports progressive exertional dyspnea and a chronic productive cough over several years.",
+      "lead_in": "Which spirometry pattern best supports a diagnosis of COPD?",
+      "subject": "Pulmonology",
+      "difficulty": "Easy",
+      "status": "unused",
+      "marked": false
+    },
+    {
+      "id": 100235,
+      "stem": "A 31-year-old presents with sudden pleuritic chest pain and dyspnea two weeks after a long-haul flight.",
+      "lead_in": "What is the most appropriate initial diagnostic test?",
+      "subject": "Pulmonology",
+      "difficulty": "Medium",
+      "status": "marked",
+      "marked": true
+    },
+    {
+      "id": 100236,
+      "stem": "A 70-year-old with diabetes and hypertension has rising creatinine and 2+ proteinuria on urinalysis.",
+      "lead_in": "Which finding most strongly suggests diabetic nephropathy?",
+      "subject": "Nephrology",
+      "difficulty": "Medium",
+      "status": "unused",
+      "marked": false
+    },
+    {
+      "id": 100237,
+      "stem": "A 52-year-old develops acute kidney injury after a contrast-enhanced CT scan with muddy brown casts on microscopy.",
+      "lead_in": "What is the most likely diagnosis?",
+      "subject": "Nephrology",
+      "difficulty": "Hard",
+      "status": "incorrect",
+      "marked": false
+    },
+    {
+      "id": 100238,
+      "stem": "A 38-year-old woman reports heat intolerance, weight loss, and palpitations with a diffusely enlarged thyroid.",
+      "lead_in": "Which laboratory pattern confirms primary hyperthyroidism?",
+      "subject": "Endocrinology",
+      "difficulty": "Easy",
+      "status": "correct",
+      "marked": false
+    },
+    {
+      "id": 100239,
+      "stem": "A 60-year-old with poorly controlled type 2 diabetes presents with polyuria, confusion, and a glucose of 720 mg/dL.",
+      "lead_in": "Which finding distinguishes HHS from diabetic ketoacidosis?",
+      "subject": "Endocrinology",
+      "difficulty": "Medium",
+      "status": "unused",
+      "marked": false
+    },
+    {
+      "id": 100240,
+      "stem": "A 29-year-old returning traveler has cyclical fevers, chills, and thrombocytopenia after a trip to sub-Saharan Africa.",
+      "lead_in": "Which test is most appropriate to confirm the diagnosis?",
+      "subject": "Infectious Disease",
+      "difficulty": "Medium",
+      "status": "correct",
+      "marked": false
+    },
+    {
+      "id": 100241,
+      "stem": "A 48-year-old with fever, productive cough, and a lobar consolidation on chest radiograph.",
+      "lead_in": "Which empiric antibiotic regimen is most appropriate for community-acquired pneumonia requiring admission?",
+      "subject": "Infectious Disease",
+      "difficulty": "Easy",
+      "status": "unused",
+      "marked": false
+    },
+    {
+      "id": 100242,
+      "stem": "A 33-year-old woman presents with a unilateral throbbing headache, photophobia, and nausea lasting hours.",
+      "lead_in": "Which therapy is most appropriate for acute abortive treatment of migraine?",
+      "subject": "Neurology",
+      "difficulty": "Easy",
+      "status": "correct",
+      "marked": false
+    }
+  ]
+}

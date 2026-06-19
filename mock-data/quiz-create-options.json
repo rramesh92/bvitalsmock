@@ -1,0 +1,35 @@
+{
+  "modes": [
+    { "key": "test", "label": "Test", "book": "closed", "description": ["Answers and explanations available <span class=\"font-weight-bold\">after</span> the quiz.", "<em>Included</em> in Performance Metrics"] },
+    { "key": "adaptive", "label": "Adaptive (CAT)", "book": "closed", "description": ["Answers and explanations available <span class=\"font-weight-bold\">after</span> the quiz", "<em>Not Included</em> in Performance Metrics", "Emulates the exam you'll see on test day; adapts in real-time based on your ability"] },
+    { "key": "tutor", "label": "Tutor", "book": "open", "description": ["Answers and explanations available <span class=\"font-weight-bold\">during</span> the quiz", "<strong>First</strong> response to a question is used to determine score"] },
+    { "key": "study", "label": "Study / Open Book", "book": "open", "description": ["Answers and explanations available <span class=\"font-weight-bold\">during</span> the quiz", "<strong>Final</strong> response to a question is used to determine score"] }
+  ],
+  "question_statuses": [
+    { "key": "All", "label": "All", "count": 1850 },
+    { "key": "Unanswered", "label": "Unanswered", "count": 1208 },
+    { "key": "Incorrect", "label": "Incorrect", "count": 186 },
+    { "key": "Correct", "label": "Correct", "count": 456 },
+    { "key": "Unseen", "label": "Unseen", "count": 1022 }
+  ],
+  "marked_count": 24,
+  "difficulty_levels": [
+    { "key": "all", "label": "All", "count": 1850 },
+    { "key": "hard", "label": "Hard", "count": 410 },
+    { "key": "moderate", "label": "Moderate", "count": 980 },
+    { "key": "easy", "label": "Easy", "count": 460 }
+  ],
+  "subjects": [
+    { "id": 1, "name": "Cardiology", "available": 240 },
+    { "id": 2, "name": "Pulmonology", "available": 180 },
+    { "id": 3, "name": "Nephrology", "available": 150 },
+    { "id": 4, "name": "Endocrinology", "available": 160 },
+    { "id": 5, "name": "Gastroenterology", "available": 170 },
+    { "id": 6, "name": "Infectious Disease", "available": 190 },
+    { "id": 7, "name": "Hematology/Oncology", "available": 200 },
+    { "id": 8, "name": "Rheumatology", "available": 110 },
+    { "id": 9, "name": "Neurology", "available": 130 }
+  ],
+  "max_questions": 200,
+  "question_total_presets": [10, 25]
+}

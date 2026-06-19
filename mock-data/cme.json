@@ -1,0 +1,76 @@
+{
+  "question_bank_id": 12,
+  "summary": { "earned": 18.5, "available": 60, "claimed": 10, "type": "AMA PRA Category 1™" },
+  "in_progress": [
+    {
+      "id": 701,
+      "display_name": "Internal Medicine Board Review CME",
+      "activity_type": "AMA PRA Category 1™",
+      "credit_type": "AMA PRA Category 1™",
+      "max_credits": 60,
+      "credits_earned": 18.5,
+      "credits_claimed": 10,
+      "minimum_percent_correct": 70,
+      "percent_correct": 73,
+      "incorrect_total": 46,
+      "questions_to_next_credit": 12,
+      "questions_per_credit": 20,
+      "state": "in_progress",
+      "board_id_or_license_number_required": true
+    },
+    {
+      "id": 702,
+      "display_name": "Cardiology Update Module",
+      "activity_type": "AMA PRA Category 1™",
+      "credit_type": "AMA PRA Category 1™",
+      "max_credits": 40,
+      "credits_earned": 6,
+      "credits_claimed": 0,
+      "minimum_percent_correct": 70,
+      "percent_correct": 64,
+      "incorrect_total": 35,
+      "questions_to_next_credit": 8,
+      "questions_per_credit": 20,
+      "state": "ready_to_claim",
+      "board_id_or_license_number_required": true
+    },
+    {
+      "id": 704,
+      "display_name": "MOC Performance Improvement — Internal Medicine",
+      "activity_type": "MOC Points",
+      "credit_type": "MOC Points",
+      "max_credits": 20,
+      "credits_earned": 4,
+      "credits_claimed": 0,
+      "minimum_percent_correct": 70,
+      "percent_correct": 71,
+      "incorrect_total": 9,
+      "questions_to_next_credit": 5,
+      "questions_per_credit": 25,
+      "state": "in_progress",
+      "board_id_or_license_number_required": true
+    }
+  ],
+  "completed": [
+    {
+      "id": 703,
+      "display_name": "Nursing Contact Hours — Pharmacology",
+      "activity_type": "ANCC Contact Hours",
+      "credit_type": "ANCC Contact Hours",
+      "max_credits": 15,
+      "credits_earned": 15,
+      "credits_claimed": 15,
+      "minimum_percent_correct": 80,
+      "percent_correct": 84,
+      "incorrect_total": 6,
+      "questions_to_next_credit": 0,
+      "questions_per_credit": 20,
+      "state": "completed",
+      "board_id_or_license_number_required": false
+    }
+  ],
+  "licenses": [
+    { "id": 81, "board_name": "ABIM", "license_number": "IM-558231", "credit_type": "MOC Points", "requirement_hours": 100, "earned_hours": 33.5, "renewal_date": "2027-12-31" },
+    { "id": 82, "board_name": "ANCC", "license_number": "RN-220447", "credit_type": "ANCC Contact Hours", "requirement_hours": 30, "earned_hours": 15, "renewal_date": "2026-11-30" }
+  ]
+}

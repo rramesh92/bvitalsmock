@@ -1,0 +1,6 @@
+{
+  "certificates": [
+    { "id": 9001, "activity": "Nursing Contact Hours — Pharmacology", "cme_type": "ANCC Contact Hours", "credits": 15, "date_range": "Jan 2026 – May 2026", "issued_date": "2026-05-30", "certificate_number": "BV-CE-2026-009001" },
+    { "id": 9002, "activity": "Internal Medicine Board Review CME", "cme_type": "AMA PRA Category 1™", "credits": 10, "date_range": "Jan 2026 – Apr 2026", "issued_date": "2026-04-12", "certificate_number": "BV-CME-2026-009002" }
+  ]
+}

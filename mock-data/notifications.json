@@ -1,0 +1,8 @@
+{
+  "unread_count": 2,
+  "notifications": [
+    { "id": 1, "type": "cme", "title": "10 CME credits ready to claim", "body": "You've passed the threshold on Internal Medicine Board Review.", "read": false, "created_at": "2026-06-15" },
+    { "id": 2, "type": "assignment", "title": "New assignment: Cardiology Set 3", "body": "Due June 28 from your program director.", "read": false, "created_at": "2026-06-14" },
+    { "id": 3, "type": "system", "title": "Your trial ends in 1 day", "body": "Upgrade to keep access to NCLEX-RN (Next Gen).", "read": true, "created_at": "2026-06-13" }
+  ]
+}

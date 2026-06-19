@@ -1,0 +1,39 @@
+{
+  "organization": "Riverside Internal Medicine Residency",
+  "users": [
+    { "id": 5001, "first_name": "Karen", "last_name": "Whitfield", "email": "karen.whitfield@riverside.edu", "role": "admin", "status": "active", "last_active": "2026-06-15" },
+    { "id": 5002, "first_name": "Omar", "last_name": "Haddad", "email": "omar.haddad@riverside.edu", "role": "instructor", "status": "active", "last_active": "2026-06-14" },
+    { "id": 5003, "first_name": "Priya", "last_name": "Nair", "email": "priya.nair@riverside.edu", "role": "instructor", "status": "active", "last_active": "2026-06-13" },
+    { "id": 5004, "first_name": "Daniel", "last_name": "Cho", "email": "daniel.cho@riverside.edu", "role": "student", "status": "active", "last_active": "2026-06-15" },
+    { "id": 5005, "first_name": "Maria", "last_name": "Gonzalez", "email": "maria.gonzalez@riverside.edu", "role": "student", "status": "active", "last_active": "2026-06-12" },
+    { "id": 5006, "first_name": "James", "last_name": "Okafor", "email": "james.okafor@riverside.edu", "role": "student", "status": "invited", "last_active": null },
+    { "id": 5007, "first_name": "Sophie", "last_name": "Lindgren", "email": "sophie.lindgren@riverside.edu", "role": "student", "status": "active", "last_active": "2026-06-11" },
+    { "id": 5008, "first_name": "Raj", "last_name": "Patel", "email": "raj.patel@riverside.edu", "role": "student", "status": "disabled", "last_active": "2026-04-02" },
+    { "id": 5009, "first_name": "Emily", "last_name": "Turner", "email": "emily.turner@riverside.edu", "role": "student", "status": "active", "last_active": "2026-06-10" },
+    { "id": 5010, "first_name": "Liam", "last_name": "O'Brien", "email": "liam.obrien@riverside.edu", "role": "instructor", "status": "invited", "last_active": null },
+    { "id": 5011, "first_name": "Aisha", "last_name": "Rahman", "email": "aisha.rahman@riverside.edu", "role": "student", "status": "active", "last_active": "2026-06-09" },
+    { "id": 5012, "first_name": "Noah", "last_name": "Bergstrom", "email": "noah.bergstrom@riverside.edu", "role": "student", "status": "disabled", "last_active": "2026-03-18" }
+  ],
+  "bulk_upload_snapshot": {
+    "filename": "pgy1_cohort_2027.csv",
+    "role": "Student",
+    "created": 9,
+    "skipped": 2,
+    "errors": 3,
+    "success_list": [
+      { "first_name": "Hannah", "last_name": "Weber", "email": "hannah.weber@riverside.edu", "role": "Student" },
+      { "first_name": "Marcus", "last_name": "Delgado", "email": "marcus.delgado@riverside.edu", "role": "Student" },
+      { "first_name": "Ingrid", "last_name": "Larsson", "email": "ingrid.larsson@riverside.edu", "role": "Student" },
+      { "first_name": "Tobias", "last_name": "Schmidt", "email": "tobias.schmidt@riverside.edu", "role": "Student" }
+    ],
+    "failure_list": [
+      { "first_name": "Olivia", "last_name": "Reyes", "email": "olivia.reyes@riverside.edu", "role": "Student", "reason": "Duplicate email." },
+      { "first_name": "Ethan", "last_name": "Kim", "email": "ethan.kim(at)riverside.edu", "role": "Student", "reason": "Invalid email format." },
+      { "first_name": "Zo#@e", "last_name": "Martin", "email": "zoe.martin@riverside.edu", "role": "Student", "reason": "Invalid characters in name (removed)." }
+    ],
+    "skipped_list": [
+      { "first_name": "Lucas", "last_name": "Fischer", "email": "lucas.fischer@riverside.edu", "role": "Student", "reason": "User already exists." },
+      { "first_name": "Mia", "last_name": "Andersson", "email": "mia.andersson@riverside.edu", "role": "Student", "reason": "User already exists." }
+    ]
+  }
+}

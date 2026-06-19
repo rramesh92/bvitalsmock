@@ -1,0 +1,39 @@
+{
+  "organization": "Test Medical College",
+  "organizations": ["Test Medical College", "Riverside Residency Program"],
+  "classes": [
+    { "id": 40330, "name": "TestClass", "recipients": 0, "delegates": 0, "created": "2026-06-11" },
+    { "id": 40320, "name": "RegressionClass9June", "recipients": 0, "delegates": 1, "created": "2026-06-09" },
+    { "id": 40290, "name": "NGN-Class-2Students", "recipients": 2, "delegates": 0, "created": "2026-05-29" },
+    { "id": 40191, "name": "TutorModeClass", "recipients": 3, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40192, "name": "TestModeClass", "recipients": 3, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40193, "name": "CATClass", "recipients": 2, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40194, "name": "CatClass", "recipients": 2, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40195, "name": "NewClassOneUser", "recipients": 1, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40196, "name": "TestWithoneUser", "recipients": 1, "delegates": 0, "created": "2026-05-19" },
+    { "id": 40180, "name": "TestClass123", "recipients": 3, "delegates": 0, "created": "2026-05-18" },
+    { "id": 40181, "name": "100 Students", "recipients": 100, "delegates": 0, "created": "2026-05-18" },
+    { "id": 40182, "name": "49 Student", "recipients": 49, "delegates": 0, "created": "2026-05-18" },
+    { "id": 39990, "name": "2StudentClass-NGN", "recipients": 2, "delegates": 0, "created": "2026-02-23" },
+    { "id": 39900, "name": "RegressionTest", "recipients": 2, "delegates": 0, "created": "2026-02-09" },
+    { "id": 39500, "name": "Test2", "recipients": 1, "delegates": 0, "created": "2025-11-18" },
+    { "id": 39400, "name": "asd", "recipients": 1, "delegates": 0, "created": "2025-11-13" },
+    { "id": 39100, "name": "HotFix3", "recipients": 20, "delegates": 0, "created": "2025-09-17" },
+    { "id": 39101, "name": "HotFix2", "recipients": 15, "delegates": 0, "created": "2025-09-17" }
+  ],
+  "delegated_classes": [],
+  "class_detail": {
+    "40191": {
+      "name": "TutorModeClass",
+      "created": "2026-05-19",
+      "recipients": 3,
+      "delegates": 0,
+      "students": [
+        { "email": "autest47@medcollege.com", "first_name": "Automation_Test47", "last_name": "User_Test47" },
+        { "email": "autest48@medcollege.com", "first_name": "Automation_Test48", "last_name": "User_Test48" },
+        { "email": "autest49@medcollege.com", "first_name": "Automation_Test49", "last_name": "User_Test49" }
+      ],
+      "delegate_list": []
+    }
+  }
+}

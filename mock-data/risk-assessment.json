@@ -1,0 +1,25 @@
+{
+  "question_bank_id": 12,
+  "readiness_category": "On Track",
+  "readiness_score": 78,
+  "peer_percentile": 68,
+  "exam_date": "2026-08-22",
+  "distribution": [
+    { "category": "On Track", "percent": 38, "color": "good" },
+    { "category": "Needs Improvement", "percent": 31, "color": "warn" },
+    { "category": "At Risk", "percent": 19, "color": "risk" },
+    { "category": "Not Enough Data", "percent": 12, "color": "muted" }
+  ],
+  "subjects": [
+    { "subject": "Endocrinology", "risk_category": "On Track", "color": "good", "score": 81, "answered": 77 },
+    { "subject": "Rheumatology", "risk_category": "On Track", "color": "good", "score": 76, "answered": 50 },
+    { "subject": "Pulmonology", "risk_category": "On Track", "color": "good", "score": 74, "answered": 98 },
+    { "subject": "Infectious Disease", "risk_category": "Needs Improvement", "color": "warn", "score": 69, "answered": 90 },
+    { "subject": "Gastroenterology", "risk_category": "Needs Improvement", "color": "warn", "score": 69, "answered": 55 },
+    { "subject": "Cardiology", "risk_category": "At Risk", "color": "risk", "score": 62, "answered": 120 },
+    { "subject": "Nephrology", "risk_category": "At Risk", "color": "risk", "score": 58, "answered": 64 },
+    { "subject": "Hematology/Oncology", "risk_category": "Needs Improvement", "color": "warn", "score": 60, "answered": 88 },
+    { "subject": "Dermatology", "risk_category": "Not Enough Data", "color": "muted", "score": null, "answered": 4 }
+  ],
+  "recommendation": "Focus your next sessions on Cardiology and Nephrology — both are At Risk and high-yield for the ABIM exam. You must answer at least 10 questions in a subject for its Risk Category to populate."
+}

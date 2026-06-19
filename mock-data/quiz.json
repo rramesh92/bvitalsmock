@@ -1,0 +1,150 @@
+{
+  "id": 90042,
+  "name": "Quick Quiz #43",
+  "type": "tutor",
+  "status": "incomplete",
+  "tutor_mode": true,
+  "timed": false,
+  "total_questions": 7,
+  "question_bank_id": 12,
+  "questions": [
+    {
+      "id": 90122,
+      "number": 1,
+      "subject": "Cardiology",
+      "difficulty_level": "medium",
+      "marked": true,
+      "lead_in": "A 64-year-old man with a history of hypertension presents with exertional chest pressure relieved by rest. ECG shows no acute changes. Which of the following is the most appropriate next step?",
+      "plain_name": "A 64-year-old man with hypertension presents with exertional chest pressure...",
+      "answers": [
+        { "id": 1, "choice": 0, "plain_name": "Exercise stress testing", "is_correct": true, "peer_response_count": 61 },
+        { "id": 2, "choice": 1, "plain_name": "Immediate coronary angiography", "is_correct": false, "peer_response_count": 18 },
+        { "id": 3, "choice": 2, "plain_name": "Start high-dose statin and reassure", "is_correct": false, "peer_response_count": 12 },
+        { "id": 4, "choice": 3, "plain_name": "Echocardiogram at rest only", "is_correct": false, "peer_response_count": 9 }
+      ],
+      "correct_answer_ids": [1],
+      "plain_explanation": "Stable angina with a non-diagnostic resting ECG is best evaluated with exercise stress testing to risk-stratify before considering invasive angiography. Immediate angiography is reserved for high-risk or unstable presentations.",
+      "p_value": 0.61,
+      "peer_response_count": 100,
+      "resources": [{ "title": "ACC/AHA Stable IHD Guideline", "url": "#" }]
+    },
+    {
+      "id": 90123,
+      "number": 2,
+      "subject": "Nephrology",
+      "difficulty_level": "hard",
+      "marked": false,
+      "lead_in": "A 52-year-old woman with type 2 diabetes has a urine albumin-to-creatinine ratio of 320 mg/g. Which medication class best slows progression of her kidney disease?",
+      "plain_name": "A 52-year-old woman with type 2 diabetes and albuminuria...",
+      "answers": [
+        { "id": 5, "choice": 0, "plain_name": "Loop diuretic", "is_correct": false, "peer_response_count": 8 },
+        { "id": 6, "choice": 1, "plain_name": "ACE inhibitor / ARB", "is_correct": true, "peer_response_count": 72 },
+        { "id": 7, "choice": 2, "plain_name": "Non-dihydropyridine calcium channel blocker", "is_correct": false, "peer_response_count": 11 },
+        { "id": 8, "choice": 3, "plain_name": "Alpha blocker", "is_correct": false, "peer_response_count": 9 }
+      ],
+      "correct_answer_ids": [6],
+      "plain_explanation": "ACE inhibitors and ARBs reduce intraglomerular pressure and albuminuria, slowing diabetic kidney disease progression. They are first-line in diabetics with albuminuria.",
+      "p_value": 0.72,
+      "peer_response_count": 100,
+      "resources": []
+    },
+    {
+      "id": 90124,
+      "number": 3,
+      "subject": "Infectious Disease",
+      "difficulty_level": "easy",
+      "marked": false,
+      "lead_in": "Which organism is the most common cause of community-acquired bacterial pneumonia in adults?",
+      "plain_name": "Most common cause of community-acquired bacterial pneumonia...",
+      "answers": [
+        { "id": 9, "choice": 0, "plain_name": "Streptococcus pneumoniae", "is_correct": true, "peer_response_count": 88 },
+        { "id": 10, "choice": 1, "plain_name": "Mycoplasma pneumoniae", "is_correct": false, "peer_response_count": 7 },
+        { "id": 11, "choice": 2, "plain_name": "Legionella pneumophila", "is_correct": false, "peer_response_count": 3 },
+        { "id": 12, "choice": 3, "plain_name": "Klebsiella pneumoniae", "is_correct": false, "peer_response_count": 2 }
+      ],
+      "correct_answer_ids": [9],
+      "plain_explanation": "Streptococcus pneumoniae remains the most common bacterial cause of community-acquired pneumonia in adults.",
+      "p_value": 0.88,
+      "peer_response_count": 100,
+      "resources": []
+    },
+    {
+      "id": 90125,
+      "number": 4,
+      "subject": "Endocrinology",
+      "difficulty_level": "medium",
+      "marked": false,
+      "lead_in": "A patient presents with fatigue, weight gain, cold intolerance, and an elevated TSH with low free T4. What is the diagnosis?",
+      "plain_name": "Fatigue, weight gain, cold intolerance, elevated TSH, low free T4...",
+      "answers": [
+        { "id": 13, "choice": 0, "plain_name": "Primary hypothyroidism", "is_correct": true, "peer_response_count": 79 },
+        { "id": 14, "choice": 1, "plain_name": "Secondary hypothyroidism", "is_correct": false, "peer_response_count": 12 },
+        { "id": 15, "choice": 2, "plain_name": "Subclinical hyperthyroidism", "is_correct": false, "peer_response_count": 5 },
+        { "id": 16, "choice": 3, "plain_name": "Euthyroid sick syndrome", "is_correct": false, "peer_response_count": 4 }
+      ],
+      "correct_answer_ids": [13],
+      "plain_explanation": "Elevated TSH with low free T4 indicates primary hypothyroidism — the thyroid gland fails and the pituitary compensates with increased TSH.",
+      "p_value": 0.79,
+      "peer_response_count": 100,
+      "resources": []
+    },
+    {
+      "id": 90126,
+      "number": 5,
+      "subject": "Hematology/Oncology",
+      "difficulty_level": "hard",
+      "marked": false,
+      "lead_in": "A 30-year-old woman has microcytic anemia with low ferritin and low transferrin saturation. What is the most likely cause?",
+      "plain_name": "Microcytic anemia with low ferritin and low transferrin saturation...",
+      "answers": [
+        { "id": 17, "choice": 0, "plain_name": "Iron deficiency anemia", "is_correct": true, "peer_response_count": 83 },
+        { "id": 18, "choice": 1, "plain_name": "Anemia of chronic disease", "is_correct": false, "peer_response_count": 10 },
+        { "id": 19, "choice": 2, "plain_name": "Thalassemia trait", "is_correct": false, "peer_response_count": 5 },
+        { "id": 20, "choice": 3, "plain_name": "Sideroblastic anemia", "is_correct": false, "peer_response_count": 2 }
+      ],
+      "correct_answer_ids": [17],
+      "plain_explanation": "Low ferritin is the most specific indicator of iron deficiency. Combined with low transferrin saturation and microcytosis, iron deficiency anemia is the diagnosis.",
+      "p_value": 0.83,
+      "peer_response_count": 100,
+      "resources": []
+    },
+    {
+      "id": 90127,
+      "number": 6,
+      "subject": "NGN Standalone",
+      "difficulty_level": "medium",
+      "ngn_type": "dropdown",
+      "marked": false,
+      "lead_in": "Complete the sentences by selecting from the drop-down options.",
+      "cloze": [
+        { "text": "The client is most likely experiencing ", "id": "d1", "options": ["hypoglycemia", "diabetic ketoacidosis", "hyperthyroid storm"], "answer": "diabetic ketoacidosis" },
+        { "text": " as evidenced by the client's ", "id": "d2", "options": ["bradycardia", "Kussmaul respirations", "hypertension"], "answer": "Kussmaul respirations" },
+        { "text": ".", "id": null, "options": [], "answer": null }
+      ],
+      "plain_explanation": "Diabetic ketoacidosis presents with hyperglycemia, ketosis, and compensatory Kussmaul (deep, rapid) respirations as the body attempts to correct metabolic acidosis.",
+      "p_value": 0.4,
+      "peer_response_count": 100,
+      "resources": []
+    },
+    {
+      "id": 90128,
+      "number": 7,
+      "subject": "NGN Case Study",
+      "difficulty_level": "hard",
+      "ngn_type": "matrix",
+      "marked": false,
+      "lead_in": "For each potential intervention, click to specify whether it is Indicated or Contraindicated for a client in diabetic ketoacidosis.",
+      "matrix_cols": ["Indicated", "Contraindicated"],
+      "matrix_rows": [
+        { "id": "m1", "label": "Initiate IV isotonic fluids", "answer": "Indicated" },
+        { "id": "m2", "label": "Administer IV insulin infusion", "answer": "Indicated" },
+        { "id": "m3", "label": "Withhold all potassium replacement", "answer": "Contraindicated" },
+        { "id": "m4", "label": "Give oral hypoglycemic agents", "answer": "Contraindicated" }
+      ],
+      "plain_explanation": "DKA management centers on IV fluids, an insulin infusion, and careful potassium monitoring/replacement. Oral agents are inappropriate in acute DKA, and potassium should not be withheld since insulin drives K+ intracellularly.",
+      "p_value": 0.34,
+      "peer_response_count": 100,
+      "resources": []
+    }
+  ]
+}

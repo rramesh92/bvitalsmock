@@ -1,0 +1,22 @@
+{
+  "question_bank_id": 44,
+  "score": 20,
+  "peer_rank_percentile": 18,
+  "expires_in_days": 8,
+  "start_quiz": {
+    "quick_start": { "unanswered": 10, "description": "10 unanswered questions, all subjects, tutor mode." },
+    "at_risk": { "questions": 10, "available": false, "description": "10 questions, at risk subjects, tutor mode." }
+  },
+  "question_status": { "answered": 10, "unanswered": 707, "unseen": 705 },
+  "subject_risk_distribution": [
+    { "category": "On Track", "percent": 0, "color": "good" },
+    { "category": "Needs Improvement", "percent": 0, "color": "warn" },
+    { "category": "At Risk", "percent": 0, "color": "risk" },
+    { "category": "Not Enough Data", "percent": 100, "color": "muted" }
+  ],
+  "cme_moc": { "type": "AMA PRA Category 1™", "earned": 0, "available": 40, "claimed": 0 },
+  "quizzes": [],
+  "assignments": [
+    { "id": 401, "name": "Addiction Medicine — Set 1", "due_date": "2026-06-28", "completed": 0, "assigned": 10, "status": "active" }
+  ]
+}

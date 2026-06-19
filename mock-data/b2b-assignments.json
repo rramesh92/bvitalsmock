@@ -1,0 +1,14 @@
+{
+  "organization": "Test Medical College",
+  "assignments": [
+    { "id": 401, "name": "BV-NGN Assignment", "class": "", "template": "BoardVitals Team Training 12/6/2026", "question_bank": "BoardVitals Team Training", "completed": "0/1", "start": "2026-06-12", "end": "" },
+    { "id": 402, "name": "NGN", "class": "", "template": "BoardVitals Team Training 12/6/2026", "question_bank": "BoardVitals Team Training", "completed": "0/100", "start": "2026-06-12", "end": "" },
+    { "id": 403, "name": "sad", "class": "", "template": "Addiction Medicine 09/06/2026", "question_bank": "Addiction Medicine", "completed": "0/1", "start": "2026-06-12", "end": "" },
+    { "id": 404, "name": "TestMode", "class": "", "template": "NCLEX-PN 09/06/2026", "question_bank": "NCLEX-PN", "completed": "1/1", "start": "2026-06-09", "end": "" },
+    { "id": 405, "name": "TutorMode", "class": "", "template": "Addiction Medicine 09/06/2026", "question_bank": "Addiction Medicine", "completed": "1/1", "start": "2026-06-09", "end": "" },
+    { "id": 406, "name": "TestModeWithEndDate", "class": "", "template": "Addiction Medicine 09/06/2026", "question_bank": "Addiction Medicine", "completed": "1/1", "start": "2026-06-09", "end": "2026-06-09" },
+    { "id": 407, "name": "NGN Assignment", "class": "NGN-Class-2Students", "template": "BoardVitals Team Training 09/06/2026", "question_bank": "BoardVitals Team Training", "completed": "2/2", "start": "2026-06-09", "end": "" }
+  ],
+  "lms_assignments": [],
+  "delegated_assignments": []
+}

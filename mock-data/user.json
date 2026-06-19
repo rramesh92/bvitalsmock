@@ -1,0 +1,19 @@
+{
+  "id": 48213,
+  "first_name": "Jordan",
+  "last_name": "Avery",
+  "email": "jordan.avery@example.com",
+  "user_type": "consumer",
+  "sub_user_type": "resident",
+  "internal_role": "",
+  "tutor_mode_enabled": true,
+  "branding_theme": false,
+  "graduation_date": "2026-06-01",
+  "is_onboarded_mobile": true,
+  "whitelisted_question_bank_ids": [12, 7, 31],
+  "marked_question_ids": [90122, 90455],
+  "marked_clinical_pearl_ids": [311],
+  "last_quiz_types_selected": ["unused", "incorrect"],
+  "priority_organization_id": 88,
+  "avatar_initials": "JA"
+}

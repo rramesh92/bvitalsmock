@@ -1,0 +1,31 @@
+{
+  "id": 9001,
+  "name": "USMLE Step 1 — Full-Length Practice Exam 2",
+  "total_questions": 200,
+  "correct_count": 142,
+  "incorrect_count": 49,
+  "unanswered_count": 9,
+  "score": 71,
+  "predicted_pass": { "band": "Likely Pass", "likelihood": 78, "color": "good", "estimated_score": 228 },
+  "time_used_min": 318,
+  "total_time_min": 360,
+  "board_average_score": 67,
+  "peer_percentile": 64,
+  "sections": [
+    { "name": "Block 1", "correct": 31, "total": 40, "board_avg": 70 },
+    { "name": "Block 2", "correct": 28, "total": 40, "board_avg": 68 },
+    { "name": "Block 3", "correct": 30, "total": 40, "board_avg": 66 },
+    { "name": "Block 4", "correct": 27, "total": 40, "board_avg": 65 },
+    { "name": "Block 5", "correct": 26, "total": 40, "board_avg": 64 }
+  ],
+  "subjects": [
+    { "name": "Cardiovascular", "correct": 22, "total": 28, "board_avg": 70 },
+    { "name": "Respiratory", "correct": 17, "total": 24, "board_avg": 68 },
+    { "name": "Renal", "correct": 14, "total": 22, "board_avg": 63 },
+    { "name": "Gastrointestinal", "correct": 19, "total": 26, "board_avg": 67 },
+    { "name": "Neurology", "correct": 21, "total": 30, "board_avg": 66 },
+    { "name": "Endocrine", "correct": 15, "total": 20, "board_avg": 71 },
+    { "name": "Microbiology", "correct": 18, "total": 28, "board_avg": 60 },
+    { "name": "Pharmacology", "correct": 16, "total": 22, "board_avg": 65 }
+  ]
+}

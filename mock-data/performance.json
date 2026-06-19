@@ -1,0 +1,27 @@
+{
+  "question_bank_id": 44,
+  "quiz_type_filter": ["Study"],
+  "overview": {
+    "score": 41,
+    "points_earned": 27,
+    "points_possible": 66,
+    "peer_percentile": 31,
+    "your_avg_time_sec": 313,
+    "board_avg_time_sec": 0
+  },
+  "includes_caption": "Includes results from all quiz modes",
+  "by_subject": [
+    { "subject": "Alternate Format Questions", "q_correct": 11, "q_partial": 0, "q_incorrect": 2, "q_unanswered": 7, "score": 11, "points_possible": 13, "pct_correct": 85 },
+    { "subject": "Cases", "q_correct": 7, "q_partial": 0, "q_incorrect": 1, "q_unanswered": 0, "score": 7, "points_possible": 8, "pct_correct": 88 },
+    { "subject": "Fill-in-the-Blank", "q_correct": 2, "q_partial": 0, "q_incorrect": 0, "q_unanswered": 0, "score": 2, "points_possible": 2, "pct_correct": 100 },
+    { "subject": "Graphic", "q_correct": 3, "q_partial": 0, "q_incorrect": 0, "q_unanswered": 0, "score": 3, "points_possible": 3, "pct_correct": 100 },
+    { "subject": "Hotspot", "q_correct": 1, "q_partial": 0, "q_incorrect": 0, "q_unanswered": 2, "score": 1, "points_possible": 1, "pct_correct": 100 },
+    { "subject": "Multiple Select", "q_correct": 0, "q_partial": 0, "q_incorrect": 1, "q_unanswered": 4, "score": 0, "points_possible": 1, "pct_correct": 0 },
+    { "subject": "NGN Case Study", "q_correct": 0, "q_partial": 6, "q_incorrect": 0, "q_unanswered": 12, "score": 6, "points_possible": 34, "pct_correct": 18 },
+    { "subject": "NGN Standalone", "q_correct": 1, "q_partial": 1, "q_incorrect": 2, "q_unanswered": 3, "score": 3, "points_possible": 10, "pct_correct": 30 },
+    { "subject": "Open Ended", "q_correct": 4, "q_partial": 0, "q_incorrect": 0, "q_unanswered": 0, "score": 4, "points_possible": 4, "pct_correct": 100 },
+    { "subject": "Patient Box Group", "q_correct": 3, "q_partial": 0, "q_incorrect": 1, "q_unanswered": 0, "score": 3, "points_possible": 4, "pct_correct": 75 },
+    { "subject": "Sortable (Ordered Response)", "q_correct": 1, "q_partial": 0, "q_incorrect": 1, "q_unanswered": 1, "score": 1, "points_possible": 2, "pct_correct": 50 },
+    { "subject": "Videos and Images", "q_correct": 5, "q_partial": 0, "q_incorrect": 1, "q_unanswered": 2, "score": 5, "points_possible": 6, "pct_correct": 83 }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "question_bank": "ABIM Internal Medicine",
+  "subjects": [
+    "Cardiology",
+    "Pulmonology",
+    "Nephrology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Infectious Disease",
+    "Hematology",
+    "Rheumatology",
+    "Neurology",
+    "Dermatology"
+  ],
+  "questions": [
+    {
+      "id": 100412,
+      "stem": "A 58-year-old man presents with substernal chest pressure radiating to the left arm that began 40 minutes ago. ECG shows 2-mm ST elevation in leads II, III, and aVF. Which artery is most likely occluded?",
+      "subjects": ["Cardiology"],
+      "difficulty": "Medium",
+      "status": "active",
+      "updated_at": "2026-06-11",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100398,
+      "stem": "A 24-year-old woman with asthma reports worsening nocturnal cough despite daily inhaled corticosteroid use. Spirometry shows FEV1 72% predicted with 14% bronchodilator response. What is the best next step in management?",
+      "subjects": ["Pulmonology"],
+      "difficulty": "Medium",
+      "status": "active",
+      "updated_at": "2026-06-10",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100377,
+      "stem": "A 67-year-old man with type 2 diabetes has a serum creatinine of 2.1 mg/dL and urine albumin-to-creatinine ratio of 480 mg/g. Which medication class provides the greatest renoprotective benefit?",
+      "subjects": ["Nephrology", "Endocrinology"],
+      "difficulty": "Hard",
+      "status": "active",
+      "updated_at": "2026-06-09",
+      "num_answers": 4,
+      "shared": true
+    },
+    {
+      "id": 100355,
+      "stem": "A 33-year-old woman presents with heat intolerance, palpitations, and a 6-kg weight loss. TSH is suppressed and free T4 is elevated. A diffusely enlarged, nontender thyroid is palpated. What is the most likely diagnosis?",
+      "subjects": ["Endocrinology"],
+      "difficulty": "Easy",
+      "status": "active",
+      "updated_at": "2026-06-08",
+      "num_answers": 4,
+      "shared": false
+    },
+    {
+      "id": 100341,
+      "stem": "A 45-year-old man with chronic alcohol use presents with hematemesis. Endoscopy reveals bleeding esophageal varices. After resuscitation, which pharmacologic agent should be started to reduce portal pressure?",
+      "subjects": ["Gastroenterology"],
+      "difficulty": "Medium",
+      "status": "active",
+      "updated_at": "2026-06-07",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100330,
+      "stem": "A 29-year-old returning traveler from sub-Saharan Africa presents with cyclical fevers, headache, and thrombocytopenia. A thin blood smear shows ring forms within erythrocytes. What is the most appropriate initial treatment?",
+      "subjects": ["Infectious Disease", "Hematology"],
+      "difficulty": "Hard",
+      "status": "draft",
+      "updated_at": "2026-06-06",
+      "num_answers": 5,
+      "shared": false
+    },
+    {
+      "id": 100318,
+      "stem": "A 71-year-old woman presents with fatigue and a hemoglobin of 8.4 g/dL. MCV is 68 fL, ferritin is 6 ng/mL. What is the most likely underlying cause to investigate next?",
+      "subjects": ["Hematology"],
+      "difficulty": "Easy",
+      "status": "active",
+      "updated_at": "2026-06-05",
+      "num_answers": 4,
+      "shared": true
+    },
+    {
+      "id": 100307,
+      "stem": "A 52-year-old woman reports symmetric morning stiffness lasting 90 minutes affecting the MCP and PIP joints. Anti-CCP and rheumatoid factor are positive. Which finding most strongly predicts erosive disease?",
+      "subjects": ["Rheumatology"],
+      "difficulty": "Medium",
+      "status": "draft",
+      "updated_at": "2026-06-04",
+      "num_answers": 5,
+      "shared": false
+    },
+    {
+      "id": 100295,
+      "stem": "A 63-year-old man develops sudden right-sided weakness and expressive aphasia. CT head is unremarkable at 90 minutes from onset. Blood pressure is 168/92 mmHg. What is the most appropriate next step?",
+      "subjects": ["Neurology"],
+      "difficulty": "Hard",
+      "status": "active",
+      "updated_at": "2026-06-03",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100284,
+      "stem": "A 19-year-old presents with a well-demarcated, salmon-colored plaque with silvery scale over the extensor elbows. Pinpoint bleeding occurs when scale is removed. What is the most likely diagnosis?",
+      "subjects": ["Dermatology"],
+      "difficulty": "Easy",
+      "status": "active",
+      "updated_at": "2026-06-02",
+      "num_answers": 4,
+      "shared": true
+    },
+    {
+      "id": 100272,
+      "stem": "A 60-year-old man with heart failure with reduced ejection fraction (LVEF 28%) remains symptomatic on lisinopril, carvedilol, and spironolactone. Which intervention provides the greatest mortality benefit?",
+      "subjects": ["Cardiology"],
+      "difficulty": "Hard",
+      "status": "active",
+      "updated_at": "2026-06-01",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100261,
+      "stem": "A 40-year-old woman presents with episodic flushing, diarrhea, and wheezing. Urinary 5-HIAA is markedly elevated. Which imaging study should be performed to localize the primary tumor?",
+      "subjects": ["Gastroenterology", "Endocrinology"],
+      "difficulty": "Hard",
+      "status": "draft",
+      "updated_at": "2026-05-30",
+      "num_answers": 5,
+      "shared": false
+    },
+    {
+      "id": 100250,
+      "stem": "A 35-year-old man presents with painless gross hematuria. CT urography reveals a 3-cm enhancing renal mass. What is the most appropriate next step in management?",
+      "subjects": ["Nephrology"],
+      "difficulty": "Medium",
+      "status": "active",
+      "updated_at": "2026-05-29",
+      "num_answers": 4,
+      "shared": true
+    },
+    {
+      "id": 100239,
+      "stem": "A 28-year-old woman with no significant history presents with pleuritic chest pain and dyspnea after a long-haul flight. D-dimer is elevated and CTPA confirms a segmental pulmonary embolism. She is hemodynamically stable. What is the preferred initial anticoagulant?",
+      "subjects": ["Pulmonology", "Hematology"],
+      "difficulty": "Medium",
+      "status": "active",
+      "updated_at": "2026-05-28",
+      "num_answers": 5,
+      "shared": true
+    },
+    {
+      "id": 100228,
+      "stem": "A 50-year-old man presents with acute monoarticular arthritis of the first metatarsophalangeal joint. Joint aspiration reveals negatively birefringent needle-shaped crystals. Which agent is first-line for the acute flare if NSAIDs are contraindicated?",
+      "subjects": ["Rheumatology"],
+      "difficulty": "Easy",
+      "status": "active",
+      "updated_at": "2026-05-27",
+      "num_answers": 4,
+      "shared": false
+    }
+  ]
+}

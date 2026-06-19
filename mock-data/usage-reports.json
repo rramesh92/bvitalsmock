@@ -1,0 +1,29 @@
+{
+  "organization": "Riverside School of Medicine",
+  "reports": [
+    { "id": 5103, "name": "May 2026 Usage", "date_range": "May 1, 2026 – May 31, 2026", "question_bank": "USMLE Step 1", "status": "complete", "generated_at": "2026-06-01" },
+    { "id": 5102, "name": "Q1 2026 Usage", "date_range": "Jan 1, 2026 – Mar 31, 2026", "question_bank": "All Modules", "status": "complete", "generated_at": "2026-04-02" },
+    { "id": 5101, "name": "April 2026 Usage", "date_range": "Apr 1, 2026 – Apr 30, 2026", "question_bank": "USMLE Step 2 CK", "status": "generating", "generated_at": null },
+    { "id": 5100, "name": "March 2026 Usage", "date_range": "Mar 1, 2026 – Mar 31, 2026", "question_bank": "USMLE Step 1", "status": "complete", "generated_at": "2026-04-01" }
+  ],
+  "detail": {
+    "report_id": 5103,
+    "title": "May 1, 2026 to May 31, 2026",
+    "question_bank": "USMLE Step 1",
+    "cohort_summary": {
+      "registered_users": 248,
+      "active_users": 191,
+      "total_questions": 41280,
+      "total_usage_min": 9624
+    },
+    "by_module": [
+      { "module": "Cardiovascular", "students": 168, "answered": 7120, "usage_min": 1684, "avg_score": 73 },
+      { "module": "Respiratory", "students": 154, "answered": 5980, "usage_min": 1402, "avg_score": 69 },
+      { "module": "Renal", "students": 141, "answered": 5210, "usage_min": 1240, "avg_score": 64 },
+      { "module": "Gastrointestinal", "students": 149, "answered": 6040, "usage_min": 1388, "avg_score": 71 },
+      { "module": "Neurology", "students": 137, "answered": 5530, "usage_min": 1318, "avg_score": 66 },
+      { "module": "Endocrine", "students": 122, "answered": 4150, "usage_min": 988, "avg_score": 75 },
+      { "module": "Pharmacology", "students": 131, "answered": 7250, "usage_min": 1604, "avg_score": 62 }
+    ]
+  }
+}
