@@ -1,6 +1,6 @@
 window.Views = window.Views || {};
 window.Views['take-quiz'] = {
-  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null, mode: '',
+  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, confidence: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null, mode: '', scorecardVisible: false,
 
   async render(el, params = []) {
     if (!document.getElementById('css-take-quiz')) {
@@ -11,6 +11,19 @@ window.Views['take-quiz'] = {
         .tq-title .name{font-weight:700;font-size:15px}
         .tq-title .count{font-size:13px;color:#cdd8e2}
         .tq-scope{border:1px solid var(--line);border-top:0;background:var(--teal-050);padding:12px 16px;color:var(--navy-900);font-weight:600}
+        .tq-confidence{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:14px;background:var(--bg)}
+        .tq-confidence h4{margin:0 0 8px;color:var(--navy-900);font-size:13px}
+        .tq-conf-opts{display:flex;gap:8px;flex-wrap:wrap}
+        .tq-conf-opt{border:1px solid var(--line);background:#fff;color:var(--navy-800);border-radius:var(--radius-sm);padding:7px 13px;font:inherit;font-weight:700;cursor:pointer}
+        .tq-conf-opt.active{background:var(--teal-600);border-color:var(--teal-600);color:#fff}
+        .answer.locked{cursor:not-allowed;background:var(--bg);opacity:.72}
+        .answer.locked:hover{border-color:var(--line)}
+        .tq-calibration{border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;margin-top:12px;background:#fff;color:var(--navy-900);font-weight:700}
+        .tq-ai-change{margin-top:8px;color:var(--muted)}
+        .tq-scorecard .scoregrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+        .tq-scorecard .scorebox{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px}
+        .tq-scorecard .scorebox .num{font-size:28px;font-weight:800;color:var(--navy-900)}
+        .tq-scorecard ul{margin:8px 0 0;padding-left:18px}
         .tq-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
         .tq-tool{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:6px;padding:5px 11px;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
         .tq-tool.active{background:#fff;color:var(--navy-900);border-color:#fff}
@@ -54,7 +67,7 @@ window.Views['take-quiz'] = {
       this.quiz = this.buildQuiz(baseQuiz, dashboard);
     }
     catch (e) { el.innerHTML = errorState(e.message); return; }
-    this.idx = 0; this.answers = {}; this.graded = {}; this.showExp = {}; this.struck = {}; this.ngn = {}; this.tool = 'none';
+    this.idx = 0; this.answers = {}; this.graded = {}; this.showExp = {}; this.confidence = {}; this.struck = {}; this.ngn = {}; this.tool = 'none'; this.scorecardVisible = false;
     this.checkpointMode = this.mode === 'friday-checkpoint';
     this.openBook = !this.checkpointMode && (this.quiz.type === 'tutor' || this.quiz.type === 'study');
     this.quiz.questions.forEach(q => { this.marked[q.id] = q.marked; });
@@ -126,13 +139,14 @@ window.Views['take-quiz'] = {
   },
 
   renderNgn(q, revealed) {
+    const hasConfidence = !!this.confidence[q.id];
     if (q.ngn_type === 'dropdown') {
       const st = this.ngn[q.id] || {};
       return `<div class="ngn-cloze">${q.cloze.map(c => {
         if (!c.id) return H.esc(c.text);
         const ok = revealed && st[c.id] === c.answer;
         const bad = revealed && st[c.id] && st[c.id] !== c.answer;
-        return `${H.esc(c.text)}<select class="ngn-dd ${ok ? 'good' : bad ? 'bad' : ''}" data-cloze="${c.id}" ${revealed ? 'disabled' : ''}>
+        return `${H.esc(c.text)}<select class="ngn-dd ${ok ? 'good' : bad ? 'bad' : ''}" data-cloze="${c.id}" ${revealed || !hasConfidence ? 'disabled' : ''}>
           <option value="">Select…</option>${c.options.map(o => `<option ${st[c.id] === o ? 'selected' : ''}>${H.esc(o)}</option>`).join('')}</select>`;
       }).join('')}</div>`;
     }
@@ -143,19 +157,134 @@ window.Views['take-quiz'] = {
           const sel = st[r.id] === c;
           const isAns = r.answer === c;
           let cls = ''; if (revealed && isAns) cls = 'good'; else if (revealed && sel && !isAns) cls = 'bad';
-          return `<td class="ngn-cell ${cls}"><label><input type="radio" name="${r.id}" data-mrow="${r.id}" data-mcol="${H.esc(c)}" ${sel ? 'checked' : ''} ${revealed ? 'disabled' : ''}/></label></td>`;
+          return `<td class="ngn-cell ${cls}"><label><input type="radio" name="${r.id}" data-mrow="${r.id}" data-mcol="${H.esc(c)}" ${sel ? 'checked' : ''} ${revealed || !hasConfidence ? 'disabled' : ''}/></label></td>`;
         }).join('')}</tr>`).join('')}</tbody></table>`;
     }
     return '';
   },
 
+  sessionRecords() {
+    return (this.quiz?.questions || []).map((q) => {
+      const state = this.gradedState(q);
+      if (!state || !this.confidence[q.id]) return null;
+      return {
+        id: q.id,
+        number: q.number,
+        subject: q.subject,
+        confidence: this.confidence[q.id],
+        correct: state === 'Correct'
+      };
+    }).filter(Boolean);
+  },
+
+  confidenceLabel(value) {
+    return ({ low: 'low', medium: 'medium', high: 'highly' }[value] || value);
+  },
+
+  calibrationText(q) {
+    const conf = this.confidence[q.id];
+    const correct = this.gradedState(q) === 'Correct';
+    if (conf === 'high') return correct ? 'You were highly confident — and right.' : 'You were highly confident, but this was wrong.';
+    if (conf === 'medium') return correct ? 'You were moderately confident — and right.' : 'You were moderately confident, but this was wrong.';
+    return correct ? 'You chose low confidence — and this was right.' : 'You chose low confidence, and this was wrong.';
+  },
+
+  sourceCitation(q) {
+    const first = q.resources && q.resources[0];
+    if (first) return `<a href="${first.url}">${H.esc(first.title)}</a>`;
+    return `BoardVitals Question Bank rationale, QID ${H.esc(q.id)}`;
+  },
+
+  aiChangeLine() {
+    const records = this.sessionRecords();
+    if (!records.length) return 'No session answers have been revealed yet — the next session plan is unchanged.';
+    const bySubject = {};
+    records.forEach(r => {
+      bySubject[r.subject] = bySubject[r.subject] || { total: 0, missed: 0, highTotal: 0, highMissed: 0, recentHigh: [] };
+      bySubject[r.subject].total++;
+      if (!r.correct) bySubject[r.subject].missed++;
+      if (r.confidence === 'high') {
+        bySubject[r.subject].highTotal++;
+        if (!r.correct) bySubject[r.subject].highMissed++;
+        bySubject[r.subject].recentHigh.push(r);
+      }
+    });
+    const highMissSubject = Object.entries(bySubject)
+      .filter(([, v]) => v.highMissed > 0)
+      .sort((a, b) => b[1].highMissed - a[1].highMissed || b[1].highTotal - a[1].highTotal)[0];
+    if (highMissSubject) {
+      const [subject, stats] = highMissSubject;
+      const recent = stats.recentHigh.slice(-3);
+      const missed = recent.filter(r => !r.correct).length;
+      return `You've missed ${missed} of the last ${recent.length} high-confidence ${subject} questions — the next session is shifting toward ${subject}.`;
+    }
+    const missSubject = Object.entries(bySubject)
+      .filter(([, v]) => v.missed > 0)
+      .sort((a, b) => b[1].missed - a[1].missed || b[1].total - a[1].total)[0];
+    if (missSubject) {
+      const [subject, stats] = missSubject;
+      return `You've missed ${stats.missed} of ${stats.total} ${subject} questions this session — the next session is adding more ${subject} review.`;
+    }
+    const latest = records[records.length - 1];
+    const correct = records.filter(r => r.correct).length;
+    return `You're accurate on ${correct} of ${records.length} revealed questions so far — the next session keeps mixed review with one spaced-review item from ${latest.subject}.`;
+  },
+
+  divergenceRows() {
+    return this.sessionRecords().filter(r =>
+      (r.confidence === 'high' && !r.correct) || (r.confidence === 'low' && r.correct)
+    );
+  },
+
+  paintScorecard(el) {
+    clearInterval(this.timer);
+    const records = this.sessionRecords();
+    const right = records.filter(r => r.correct).length;
+    const wrong = records.length - right;
+    const divergences = this.divergenceRows();
+    const adaptiveDaily = this.mode === 'adaptive-daily';
+    const fridayCheckpoint = this.mode === 'friday-checkpoint';
+    const primary = adaptiveDaily ? 'Return to Dashboard' : fridayCheckpoint ? 'View Weekly Report' : 'See Results';
+    el.innerHTML = `<div class="quiz-shell tq-scorecard">
+      <div class="page-head">
+        <div>
+          <h1>Session Scorecard</h1>
+          <p class="subtitle">${H.esc(this.quiz.name)} confidence calibration summary.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="scoregrid">
+          <div class="scorebox"><div class="num">${right}</div><div class="muted">Right</div></div>
+          <div class="scorebox"><div class="num">${wrong}</div><div class="muted">Wrong</div></div>
+        </div>
+        <h3>Where confidence and accuracy diverged</h3>
+        ${divergences.length ? `<ul>${divergences.map(r => `<li>Question ${r.number} · ${H.esc(r.subject)}: ${r.confidence === 'high' ? 'high confidence, but this was wrong' : 'low confidence, and this was right'}</li>`).join('')}</ul>` : '<p class="muted">No clear confidence/accuracy divergences in this session.</p>'}
+        <div class="explanation">
+          <h4>Next session change</h4>
+          <p class="mb-0">${H.esc(this.aiChangeLine())}</p>
+        </div>
+        <div class="quiz-footer">
+          <a class="btn btn-secondary" href="#/dashboard">Back to Dashboard</a>
+          <button class="btn btn-primary" id="scorecard-primary">${H.esc(primary)}</button>
+        </div>
+      </div>
+    </div>`;
+    document.getElementById('scorecard-primary').onclick = () => {
+      if (adaptiveDaily) location.hash = '#/dashboard';
+      else if (fridayCheckpoint) location.hash = '#/dashboard/weekly-report';
+      else location.hash = '#/results/' + this.quiz.id;
+    };
+  },
+
   paint(el) {
+    if (this.scorecardVisible) { this.paintScorecard(el); return; }
     const q = this.quiz.questions[this.idx];
     const total = this.quiz.questions.length;
     const selected = this.answers[q.id];
     const checked = this.graded[q.id];
     const revealed = checked && (this.showExp[q.id] || !this.openBook);
     const gradedState = this.gradedState(q);
+    const hasConfidence = !!this.confidence[q.id];
 
     el.innerHTML = `
       <div class="quiz-shell">
@@ -194,10 +323,18 @@ window.Views['take-quiz'] = {
           <button class="btn btn-secondary" id="figure-media" style="padding:5px 12px;margin-bottom:10px">${Icon.book} Figure/Media</button>
           <p class="q-stem" id="q-stem">${H.esc(q.lead_in)}</p>
 
+          <div class="tq-confidence">
+            <h4>How confident are you?</h4>
+            <div class="tq-conf-opts">
+              ${['low', 'medium', 'high'].map(c => `<button class="tq-conf-opt ${this.confidence[q.id] === c ? 'active' : ''}" data-conf="${c}" ${checked || this.hasResponse(q) ? 'disabled' : ''}>${c[0].toUpperCase() + c.slice(1)}</button>`).join('')}
+            </div>
+          </div>
+
           <div id="answers">
             ${q.ngn_type ? this.renderNgn(q, revealed) : q.answers.map((a, i) => {
               const isSel = selected === a.id;
               let cls = 'answer';
+              if (!hasConfidence && !revealed) cls += ' locked';
               if (this.struck[q.id]?.has(a.id)) cls += ' struck';
               if (revealed) {
                 if (q.correct_answer_ids.includes(a.id)) cls += ' correct';
@@ -226,7 +363,9 @@ window.Views['take-quiz'] = {
               <div class="explanation">
                 <h4>${q.ngn_type ? 'Rationale' : 'Correct Answer: ' + q.answers.filter(a => q.correct_answer_ids.includes(a.id)).map(a => H.letter(a.choice)).join(', ')}</h4>
                 <p class="mb-0">${H.esc(q.plain_explanation)}</p>
-                ${q.resources?.length ? `<p class="mt-8 mb-0"><b>References:</b> ${q.resources.map(r => `<a href="${r.url}">${H.esc(r.title)}</a>`).join(', ')}</p>` : ''}
+                <p class="mt-8 mb-0"><b>Source:</b> ${this.sourceCitation(q)}</p>
+                <div class="tq-calibration">${H.esc(this.calibrationText(q))}</div>
+                <p class="tq-ai-change mb-0">${H.esc(this.aiChangeLine())}</p>
               </div>
             </div>
             <div class="tq-side">
@@ -283,6 +422,11 @@ window.Views['take-quiz'] = {
     el.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => {
       this.tool = this.tool === b.dataset.tool ? 'none' : b.dataset.tool; this.paint(el);
     });
+    el.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => {
+      if (this.graded[q.id]) return;
+      this.confidence[q.id] = b.dataset.conf;
+      this.paint(el);
+    });
     ['tool-calc', 'tool-labs', 'tool-note'].forEach(id => {
       const btn = document.getElementById(id);
       if (btn) btn.onclick = () => toast(btn.textContent.trim() + ' is mocked');
@@ -294,6 +438,10 @@ window.Views['take-quiz'] = {
 
     el.querySelectorAll('[data-aid]').forEach(a => a.onclick = () => {
       const aid = parseInt(a.dataset.aid, 10);
+      if (!this.confidence[q.id]) {
+        toast('Rate confidence before selecting an answer');
+        return;
+      }
       if (this.tool === 'strikeout') {
         this.struck[q.id] = this.struck[q.id] || new Set();
         this.struck[q.id].has(aid) ? this.struck[q.id].delete(aid) : this.struck[q.id].add(aid);
@@ -301,21 +449,24 @@ window.Views['take-quiz'] = {
       }
       if (this.graded[q.id] && this.openBook) return; // locked after grading in open-book mode
       this.answers[q.id] = aid;
-      if (!this.openBook && !this.checkpointMode) this.graded[q.id] = true; // closed-book: immediate feedback
+      this.graded[q.id] = true;
+      if (this.openBook) this.showExp[q.id] = true;
       this.paint(el);
     });
 
     // NGN inputs (dropdown cloze + matrix grid)
     el.querySelectorAll('[data-cloze]').forEach(sel => sel.onchange = () => {
+      if (!this.confidence[q.id]) { toast('Rate confidence before selecting an answer'); this.paint(el); return; }
       this.ngn[q.id] = this.ngn[q.id] || {};
       this.ngn[q.id][sel.dataset.cloze] = sel.value;
-      if (!this.openBook && this.hasResponse(q)) this.graded[q.id] = true;
+      if (this.hasResponse(q)) { this.graded[q.id] = true; if (this.openBook) this.showExp[q.id] = true; }
       this.paint(el);
     });
     el.querySelectorAll('[data-mrow]').forEach(r => r.onchange = () => {
+      if (!this.confidence[q.id]) { toast('Rate confidence before selecting an answer'); this.paint(el); return; }
       this.ngn[q.id] = this.ngn[q.id] || {};
       this.ngn[q.id][r.dataset.mrow] = r.dataset.mcol;
-      if (!this.openBook && this.hasResponse(q)) this.graded[q.id] = true;
+      if (this.hasResponse(q)) { this.graded[q.id] = true; if (this.openBook) this.showExp[q.id] = true; }
       this.paint(el);
     });
 
@@ -363,25 +514,23 @@ window.Views['take-quiz'] = {
   },
 
   gradeModal() {
-    const score = this.score();
     const adaptiveDaily = this.mode === 'adaptive-daily';
     const fridayCheckpoint = this.mode === 'friday-checkpoint';
     openModal({
       title: this.quiz.name,
-      body: `<p>${adaptiveDaily ? "Today's session is complete. Return to Dashboard to update your plan." : fridayCheckpoint ? 'Friday Checkpoint is complete. Continue to your weekly report.' : 'The Quiz has been completed. Submit to see your results.'}</p>`,
-      confirmLabel: adaptiveDaily ? 'Return to Dashboard' : fridayCheckpoint ? 'View Weekly Report' : 'Submit',
+      body: `<p>${fridayCheckpoint ? 'Friday Checkpoint is complete. Review your session scorecard before opening the weekly report.' : 'This session is complete. Review your confidence and accuracy scorecard.'}</p>`,
+      confirmLabel: 'View Scorecard',
       onConfirm: () => {
         clearInterval(this.timer);
+        this.quiz.questions.forEach(q => { if (this.hasResponse(q)) this.graded[q.id] = true; });
+        const score = this.score();
         if (adaptiveDaily) {
           AdaptivePrep.markDailyComplete(score);
-          toast("Today's session complete", 'success');
-          location.hash = '#/dashboard';
         } else if (fridayCheckpoint) {
           AdaptivePrep.markCheckpointComplete(score);
-          location.hash = '#/dashboard/weekly-report';
-        } else {
-          location.hash = '#/results/' + this.quiz.id;
         }
+        this.scorecardVisible = true;
+        this.paint(document.getElementById('view-content'));
       }
     });
     // align with the maestro element id for the modal confirm
