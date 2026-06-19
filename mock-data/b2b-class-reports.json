@@ -11,6 +11,19 @@
     "national": { "average_score": 65, "median_score": 67, "peer_rank": 50 }
   },
   "summary": { "recipients": 24, "questions_answered": 12840, "completion_rate": 58 },
+  "adaptive_prep": {
+    "cohort_on_track_percent": 60,
+    "daily_session_completion_percent": 72,
+    "friday_checkpoint_completion_percent": 54,
+    "weekly_focus": ["Nephrology", "Cardiology", "Hematology/Oncology"],
+    "opted_in_student": {
+      "name": "Jordan Avery",
+      "daily_session_status": "Complete",
+      "friday_checkpoint_score": 67,
+      "confidence_calibration_change": 6,
+      "weekly_report_summary": "Mastery increased 7% versus Jordan's prior week."
+    }
+  },
   "by_subject": [
     { "subject": "Cardiology", "num_questions": 2860, "percent_correct": 61, "national_percent": 65, "avg_response_time": "1:18" },
     { "subject": "Pulmonology", "num_questions": 1740, "percent_correct": 70, "national_percent": 69, "avg_response_time": "1:05" },

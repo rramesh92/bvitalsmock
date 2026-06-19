@@ -297,13 +297,19 @@ window.openModal = function ({ title, body, confirmLabel = 'Confirm', onConfirm,
 };
 window.closeModal = () => { document.getElementById('modal-host').innerHTML = ''; };
 
-window.toast = function (msg, type = '') {
+window.toast = function (msg, type = '', opts = {}) {
   const host = document.getElementById('toast-host');
   const el = document.createElement('div');
-  el.className = `toast ${type}`;
+  el.className = `toast ${type} ${opts.onClick ? 'toast-action' : ''}`;
   el.innerHTML = `${type === 'success' ? Icon.check : type === 'error' ? Icon.alert : Icon.bell}<span>${H.esc(msg)}</span>`;
+  if (opts.onClick) {
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.onclick = () => opts.onClick();
+    el.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') opts.onClick(); };
+  }
   host.appendChild(el);
-  setTimeout(() => el.remove(), 3200);
+  setTimeout(() => el.remove(), opts.duration || 3200);
 };
 
 document.addEventListener('DOMContentLoaded', () => App.boot());

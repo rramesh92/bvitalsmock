@@ -80,6 +80,7 @@ window.Views.b2b = {
     this.injectCss();
     const c = (g.class_detail && g.class_detail[id]) || g.classes.find(x => String(x.id) === String(id)) || { name: 'Class', recipients: 0, delegates: 0, students: [], delegate_list: [], created: null };
     const students = c.students || [];
+    const sharing = AdaptivePrep.read().share_with_admin;
     el.innerHTML = `
       ${this.orgBar(g.organization, g.organizations)}
       <div class="page-head">
@@ -89,6 +90,10 @@ window.Views.b2b = {
         <button class="btn btn-primary" id="class-perf">Class Performance</button>
       </div>
       <a href="#/b2b/classes" style="display:inline-block;margin-bottom:12px">&lt; Back</a>
+      <div class="panel-card" style="padding:12px 16px;margin-bottom:14px">
+        <b style="color:var(--navy-900)">Adaptive Prep visibility:</b>
+        <span class="muted">${sharing ? 'Student opted in. Individual Adaptive Prep details may be shown.' : 'Student details are private. Class reports show aggregate cohort trends only.'}</span>
+      </div>
       <div class="section-label">Students</div>
       <div class="panel-card pad-0">
         ${students.length ? `<table class="data">
@@ -96,8 +101,7 @@ window.Views.b2b = {
           <tbody>${students.map(s => `<tr>
             <td>${H.esc(s.email)}</td><td>${H.esc(s.first_name)}</td><td>${H.esc(s.last_name)}</td>
             <td style="text-align:right;white-space:nowrap">
-              <a href="#/practice-exam-performance/501">View Performance</a> <span class="muted">|</span>
-              <a href="#/my-quizzes">View Quizzes</a> <span class="muted">|</span>
+              ${sharing ? '<a href="#/practice-exam-performance/501">View Performance</a> <span class="muted">|</span><a href="#/my-quizzes">View Quizzes</a> <span class="muted">|</span>' : '<span class="muted">Individual Adaptive Prep details private</span> <span class="muted">|</span>'}
               <a href="#" data-rm="${H.esc(s.email)}" style="color:var(--risk)">Remove</a></td>
           </tr>`).join('')}</tbody></table>`
         : emptyState('users','No students','This class has no enrolled students yet.','')}
@@ -111,13 +115,28 @@ window.Views.b2b = {
 
   async classPerformance(name) {
     let r; try { r = await DB.load('b2b-class-reports'); } catch (e) { r = null; }
-    const c = r ? r.cohort_summary : { avg_percent_correct: 64, questions_answered: 0 };
+    const c = r ? (r.cohort_summary || {
+      avg_percent_correct: r.performance?.class?.average_score || 64,
+      questions_answered: r.summary?.questions_answered || 0
+    }) : { avg_percent_correct: 64, questions_answered: 0 };
+    const ap = r?.adaptive_prep;
+    const sharing = AdaptivePrep.read().share_with_admin;
     openModal({
       title: `Class Performance — ${name}`,
       body: `<div class="grid cols-2" style="gap:12px">
         <div class="card stat" style="box-shadow:none;background:var(--bg)"><div class="value ${H.scoreClass(c.avg_percent_correct)}">${c.avg_percent_correct}%</div><div class="label">Average score</div></div>
         <div class="card stat" style="box-shadow:none;background:var(--bg)"><div class="value">${(c.questions_answered||0).toLocaleString()}</div><div class="label">Questions answered</div></div>
-      </div><p class="muted mt-8 mb-0">Full class performance report (subjects, leaderboard, national comparison) opens in the reports view.</p>`,
+      </div>${ap ? `<div class="grid cols-3 mt-16" style="gap:12px">
+        <div class="card stat" style="box-shadow:none;background:var(--bg)"><div class="value good">${ap.cohort_on_track_percent}%</div><div class="label">Cohort on-track this week</div></div>
+        <div class="card stat" style="box-shadow:none;background:var(--bg)"><div class="value">${ap.daily_session_completion_percent}%</div><div class="label">Daily session completion</div></div>
+        <div class="card stat" style="box-shadow:none;background:var(--bg)"><div class="value">${ap.friday_checkpoint_completion_percent}%</div><div class="label">Friday Checkpoint completion</div></div>
+      </div>
+      ${sharing ? `<div class="panel-card mt-16" style="padding:12px 16px">
+        <b style="color:var(--navy-900)">${H.esc(ap.opted_in_student.name)}</b>
+        <div class="muted">Daily session: ${H.esc(ap.opted_in_student.daily_session_status)} · Friday Checkpoint: ${ap.opted_in_student.friday_checkpoint_score}%</div>
+        <div class="muted">${H.esc(ap.opted_in_student.weekly_report_summary)}</div>
+      </div>` : `<p class="muted mt-8 mb-0">Individual Adaptive Prep details are hidden because the student has not opted in.</p>`}` : ''}
+      <p class="muted mt-8 mb-0">Full class performance report opens in the reports view with aggregate subject activity.</p>`,
       confirmLabel: 'Open full report', onConfirm: () => { location.hash = '#/usage-reports'; }
     });
   },
