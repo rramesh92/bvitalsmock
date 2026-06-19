@@ -137,6 +137,18 @@ window.Views.account = {
             </label>
           </div>
         </div>
+        <div class="panel-card" style="padding:16px;margin-top:16px">
+          <h3 class="settings-h3">Early completion handling</h3>
+          <p class="muted">When practice overlaps with another day's planned topic, choose whether to ask each time or apply your saved choice.</p>
+          <div class="field mb-0">
+            <label>Preference</label>
+            <select id="early-completion-pref">
+              <option value="" ${!st.early_completion_preference ? 'selected' : ''}>Ask every time</option>
+              <option value="mark" ${st.early_completion_preference === 'mark' ? 'selected' : ''}>Mark the planned day complete</option>
+              <option value="separate" ${st.early_completion_preference === 'separate' ? 'selected' : ''}>Keep activity and plan separate</option>
+            </select>
+          </div>
+        </div>
       </div>`;
   },
 
@@ -156,6 +168,11 @@ window.Views.account = {
       this.tab = 'privacy';
       const root = document.getElementById('view-content');
       if (root) this.render(root);
+    };
+    const earlyPref = body.querySelector('#early-completion-pref');
+    if (earlyPref) earlyPref.onchange = () => {
+      AdaptivePrep.setEarlyCompletionPreference(earlyPref.value || null);
+      toast('Early completion preference saved', 'success');
     };
   }
 };

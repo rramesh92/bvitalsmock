@@ -45,7 +45,7 @@ window.Views.dashboard = {
                   <b style="color:var(--navy-900)">${H.esc(ap.daily_session?.label || "Today's session")}</b>
                   <span class="pill ${todayComplete ? 'good' : 'muted'}">${todayComplete ? 'Complete' : `${ap.daily_session?.question_count || 0} questions`}</span>
                 </div>
-                ${this.weekPlanRows(ap.week_plan || [], todayComplete, checkpointComplete)}
+                ${this.weekPlanRows(ap.week_plan || [], todayComplete, checkpointComplete, apState, d)}
               </div>
               <button class="btn btn-primary btn-block btn-lg mt-16" id="adaptive-primary" data-action="${primaryAction}">${primaryLabel}</button>
             </div>
@@ -148,6 +148,7 @@ window.Views.dashboard = {
       else location.hash = '#/dashboard/weekly-report';
     };
     document.getElementById('cme-upgrade').onclick = () => { location.hash = '#/cme'; };
+    this.bindPlanControls(el, d);
     this.maybeShowReplanToast(ap, apState);
   },
 
@@ -168,19 +169,145 @@ window.Views.dashboard = {
     </div>`;
   },
 
-  weekPlanRows(rows, todayComplete, checkpointComplete) {
+  resolvedPlanRows(rows, state) {
+    const edits = state.plan_edits || {};
+    const order = state.day_order && state.day_order.length ? state.day_order : rows.map(r => r.day);
+    return order.map(day => rows.find(r => r.day === day)).filter(Boolean).map(r => {
+      const edit = edits[r.day] || {};
+      const topics = edit.topics || [r.topic];
+      return Object.assign({}, r, {
+        topics,
+        topic: topics.length ? topics.join(', ') : 'No topics selected',
+        student_edited: !!edit.student_edited
+      });
+    });
+  },
+
+  weekPlanRows(rows, todayComplete, checkpointComplete, state, data) {
     const statusClass = (status) => status === 'complete' ? 'good' : status === 'checkpoint' ? 'muted' : 'warn';
-    return `<table class="data"><tbody>${rows.map(r => {
+    const resolved = this.resolvedPlanRows(rows, state);
+    return `<div class="grid" style="gap:10px">${resolved.map((r, i) => {
       let label = r.status;
       let cls = statusClass(r.status);
+      if ((state.completed_days || []).includes(String(r.day).toLowerCase())) { label = 'complete'; cls = 'good'; }
       if (r.day === 'Friday' && todayComplete && !checkpointComplete) { label = 'ready'; cls = 'good'; }
       if (r.day === 'Friday' && checkpointComplete) { label = 'complete'; cls = 'good'; }
-      return `<tr>
-        <td style="padding:8px 0"><b>${H.esc(r.day)}</b><br><small>${H.esc(r.reason)}</small></td>
-        <td style="padding:8px 0">${H.esc(r.topic)}</td>
-        <td style="padding:8px 0;text-align:right"><span class="pill ${cls}">${H.esc(label)}</span></td>
-      </tr>`;
-    }).join('')}</tbody></table>`;
+      return `<div class="panel-card" style="padding:10px 12px">
+        <div class="between" style="gap:10px;align-items:flex-start">
+          <div>
+            <b style="color:var(--navy-900)">${H.esc(r.day)}</b>
+            <div>${H.esc(r.topic)} ${r.student_edited ? '<span class="pill good">Student edited</span>' : ''}</div>
+            <small>${H.esc(r.reason)}</small>
+          </div>
+          <span class="pill ${cls}">${H.esc(label)}</span>
+        </div>
+        <div class="row mt-8" style="gap:6px;flex-wrap:wrap">
+          <button class="btn btn-secondary" style="padding:5px 10px" data-add-topic="${H.esc(r.day)}">Add topic</button>
+          <button class="btn btn-secondary" style="padding:5px 10px" data-remove-topic="${H.esc(r.day)}" ${r.topics.length ? '' : 'disabled'}>Remove topic</button>
+          <button class="btn btn-secondary" style="padding:5px 10px" data-move-day="${H.esc(r.day)}" data-dir="up" ${i === 0 ? 'disabled' : ''}>Move up</button>
+          <button class="btn btn-secondary" style="padding:5px 10px" data-move-day="${H.esc(r.day)}" data-dir="down" ${i === resolved.length - 1 ? 'disabled' : ''}>Move down</button>
+          <button class="btn btn-primary" style="padding:5px 10px" data-custom-quiz="${H.esc(r.day)}">Build custom quiz</button>
+        </div>
+        ${this.aiSuggestions(r, data, state)}
+      </div>`;
+    }).join('')}</div>`;
+  },
+
+  topicCatalog(data) {
+    const set = new Set();
+    (data.weak_subjects || []).forEach(s => set.add(s.subject));
+    (data.adaptive_prep?.focus_topics || []).forEach(t => set.add(t));
+    ['Cardiology', 'Nephrology', 'Hematology/Oncology', 'Infectious Disease', 'Endocrinology'].forEach(t => set.add(t));
+    return Array.from(set);
+  },
+
+  aiSuggestions(row, data, state) {
+    const dismissed = state.dismissed_ai_suggestions || [];
+    const current = new Set((row.topics || []).map(t => String(t).toLowerCase()));
+    const suggestions = (data.weak_subjects || [])
+      .filter(s => !current.has(String(s.subject).toLowerCase()))
+      .slice(0, 2)
+      .map(s => ({ id: `${row.day}-${s.subject}`, topic: s.subject, reason: `${s.risk_category} mastery` }))
+      .filter(s => !dismissed.includes(s.id));
+    if (!suggestions.length) return '';
+    return `<div class="mt-8" style="border-top:1px solid var(--line);padding-top:8px">
+      ${suggestions.map(s => `<span class="pill warn" style="margin:0 6px 6px 0">AI suggestion: ${H.esc(s.topic)} — ${H.esc(s.reason)}</span>
+        <button class="btn btn-ghost" style="padding:4px 6px" data-accept-suggestion="${H.esc(row.day)}" data-topic="${H.esc(s.topic)}">Accept</button>
+        <button class="btn btn-ghost" style="padding:4px 6px" data-ignore-suggestion="${H.esc(s.id)}">Ignore</button>
+        <button class="btn btn-ghost" style="padding:4px 6px" data-dismiss-suggestion="${H.esc(s.id)}">Dismiss</button>`).join('<br>')}
+    </div>`;
+  },
+
+  bindPlanControls(el, data) {
+    const rerender = () => this.render(el);
+    const baseRows = data.adaptive_prep?.week_plan || [];
+    const baseDays = baseRows.map(r => r.day);
+    el.querySelectorAll('[data-add-topic]').forEach(btn => btn.onclick = () => this.topicModal({
+      title: `Add topic to ${btn.dataset.addTopic}`,
+      data,
+      onConfirm: (topic) => {
+        const st = AdaptivePrep.read();
+        const base = baseRows.find(r => r.day === btn.dataset.addTopic);
+        const topics = (st.plan_edits?.[btn.dataset.addTopic]?.topics || [base.topic]).concat(topic);
+        AdaptivePrep.setPlanDayTopics(btn.dataset.addTopic, Array.from(new Set(topics)));
+        rerender();
+      }
+    }));
+    el.querySelectorAll('[data-remove-topic]').forEach(btn => btn.onclick = () => {
+      const st = AdaptivePrep.read();
+      const base = baseRows.find(r => r.day === btn.dataset.removeTopic);
+      const topics = (st.plan_edits?.[btn.dataset.removeTopic]?.topics || [base.topic]).slice(0, -1);
+      AdaptivePrep.setPlanDayTopics(btn.dataset.removeTopic, topics);
+      rerender();
+    });
+    el.querySelectorAll('[data-move-day]').forEach(btn => btn.onclick = () => {
+      AdaptivePrep.movePlanDay(btn.dataset.moveDay, btn.dataset.dir, baseDays);
+      rerender();
+    });
+    el.querySelectorAll('[data-custom-quiz]').forEach(btn => btn.onclick = () => this.customQuizModal(data));
+    el.querySelectorAll('[data-accept-suggestion]').forEach(btn => btn.onclick = () => {
+      const st = AdaptivePrep.read();
+      const base = baseRows.find(r => r.day === btn.dataset.acceptSuggestion);
+      const topics = (st.plan_edits?.[btn.dataset.acceptSuggestion]?.topics || [base.topic]).concat(btn.dataset.topic);
+      AdaptivePrep.setPlanDayTopics(btn.dataset.acceptSuggestion, Array.from(new Set(topics)));
+      rerender();
+    });
+    el.querySelectorAll('[data-ignore-suggestion]').forEach(btn => btn.onclick = () => toast('Suggestion ignored'));
+    el.querySelectorAll('[data-dismiss-suggestion]').forEach(btn => btn.onclick = () => {
+      AdaptivePrep.dismissAiSuggestion(btn.dataset.dismissSuggestion);
+      rerender();
+    });
+  },
+
+  topicModal({ title, data, onConfirm }) {
+    const topics = this.topicCatalog(data);
+    let selected = topics[0];
+    openModal({
+      title,
+      body: `<div class="field"><label>Topic</label><select id="plan-topic-select">${topics.map(t => `<option>${H.esc(t)}</option>`).join('')}</select></div>`,
+      confirmLabel: 'Add topic',
+      onConfirm: () => onConfirm(selected)
+    });
+    const select = document.getElementById('plan-topic-select');
+    if (select) select.onchange = () => { selected = select.value; };
+  },
+
+  customQuizModal(data) {
+    const topics = this.topicCatalog(data);
+    let selected = [];
+    openModal({
+      title: 'Build custom quiz',
+      body: `<p class="muted">Choose any topic mix. This uses the same mastery and calibration model as your planned sessions.</p>
+        <div class="grid" style="gap:6px">${topics.map(t => `<label class="row"><input type="checkbox" data-custom-topic value="${H.esc(t)}"/> ${H.esc(t)}</label>`).join('')}</div>`,
+      confirmLabel: 'Start custom quiz',
+      onConfirm: () => {
+        AdaptivePrep.setCustomQuizTopics(selected.length ? selected : [topics[0]]);
+        location.hash = '#/take-quiz/custom-plan';
+      }
+    });
+    document.querySelectorAll('[data-custom-topic]').forEach(cb => cb.onchange = () => {
+      selected = Array.from(document.querySelectorAll('[data-custom-topic]:checked')).map(x => x.value);
+    });
   },
 
   maybeShowReplanToast(ap, state) {

@@ -1,6 +1,6 @@
 window.Views = window.Views || {};
 window.Views['take-quiz'] = {
-  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, confidence: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null, mode: '', scorecardVisible: false,
+  quiz: null, idx: 0, answers: {}, graded: {}, showExp: {}, confidence: {}, tool: 'none', struck: {}, marked: {}, seconds: 0, timer: null, mode: '', scorecardVisible: false, activityLogged: false,
 
   async render(el, params = []) {
     if (!document.getElementById('css-take-quiz')) {
@@ -64,10 +64,11 @@ window.Views['take-quiz'] = {
       const baseQuiz = await DB.load('quiz');
       const dashboard = await DB.load('dashboard');
       this.mode = params[0] || '';
+      this.dashboard = dashboard;
       this.quiz = this.buildQuiz(baseQuiz, dashboard);
     }
     catch (e) { el.innerHTML = errorState(e.message); return; }
-    this.idx = 0; this.answers = {}; this.graded = {}; this.showExp = {}; this.confidence = {}; this.struck = {}; this.ngn = {}; this.tool = 'none'; this.scorecardVisible = false;
+    this.idx = 0; this.answers = {}; this.graded = {}; this.showExp = {}; this.confidence = {}; this.struck = {}; this.ngn = {}; this.tool = 'none'; this.scorecardVisible = false; this.activityLogged = false;
     this.checkpointMode = this.mode === 'friday-checkpoint';
     this.openBook = !this.checkpointMode && (this.quiz.type === 'tutor' || this.quiz.type === 'study');
     this.quiz.questions.forEach(q => { this.marked[q.id] = q.marked; });
@@ -84,6 +85,7 @@ window.Views['take-quiz'] = {
       quiz.type = 'tutor';
       quiz.tutor_mode = true;
       quiz.timed = false;
+      quiz.session_topics = topics;
       quiz.questions = this.scopedQuestions(quiz.questions, topics, ap.daily_session?.question_count || 3);
     } else if (this.mode === 'friday-checkpoint') {
       const topics = ap.friday_checkpoint?.topics || ap.focus_topics || [];
@@ -94,7 +96,16 @@ window.Views['take-quiz'] = {
       quiz.timed = false;
       quiz.scope_topics = topics;
       quiz.scope_reason = fridayPlan.reason || ap.ai_reason || '';
+      quiz.session_topics = topics;
       quiz.questions = this.scopedQuestions(quiz.questions, topics, topics.length || 3);
+    } else if (this.mode === 'custom-plan') {
+      const topics = AdaptivePrep.read().custom_quiz_topics || [];
+      quiz.name = 'Custom Adaptive Prep Quiz';
+      quiz.type = 'tutor';
+      quiz.tutor_mode = true;
+      quiz.timed = false;
+      quiz.session_topics = topics;
+      quiz.questions = this.scopedQuestions(quiz.questions, topics, Math.max(1, topics.length));
     }
     quiz.total_questions = quiz.questions.length;
     quiz.questions.forEach((q, i) => { q.number = i + 1; });
@@ -269,10 +280,80 @@ window.Views['take-quiz'] = {
         </div>
       </div>
     </div>`;
-    document.getElementById('scorecard-primary').onclick = () => {
-      if (adaptiveDaily) location.hash = '#/dashboard';
-      else if (fridayCheckpoint) location.hash = '#/dashboard/weekly-report';
-      else location.hash = '#/results/' + this.quiz.id;
+    document.getElementById('scorecard-primary').onclick = () => this.handleScorecardPrimary(adaptiveDaily, fridayCheckpoint);
+  },
+
+  logActivity(score) {
+    if (this.activityLogged) return;
+    this.activityLogged = true;
+    AdaptivePrep.recordActivity({
+      mode: this.mode || this.quiz.type,
+      quiz_name: this.quiz.name,
+      topics: this.quiz.session_topics || [],
+      score,
+      calibration: this.sessionRecords()
+    });
+  },
+
+  ambiguousOverlap() {
+    const topics = new Set((this.quiz.session_topics || []).map(t => String(t).toLowerCase()));
+    if (!topics.size || !this.dashboard?.adaptive_prep?.week_plan) return null;
+    const today = AdaptivePrep.todayKey();
+    return this.dashboard.adaptive_prep.week_plan.find(row =>
+      String(row.day).toLowerCase() !== today &&
+      topics.has(String(row.topic).toLowerCase()) &&
+      !(AdaptivePrep.read().completed_days || []).includes(String(row.day).toLowerCase())
+    ) || null;
+  },
+
+  handleScorecardPrimary(adaptiveDaily, fridayCheckpoint) {
+    if (fridayCheckpoint) { location.hash = '#/dashboard/weekly-report'; return; }
+    if (!adaptiveDaily && this.mode !== 'custom-plan') { location.hash = '#/results/' + this.quiz.id; return; }
+    const overlap = this.ambiguousOverlap();
+    if (!overlap) { location.hash = '#/dashboard'; return; }
+    const pref = AdaptivePrep.read().early_completion_preference;
+    if (pref === 'mark') { AdaptivePrep.markPlannedDayComplete(overlap.day); location.hash = '#/dashboard'; return; }
+    if (pref === 'separate') { location.hash = '#/dashboard'; return; }
+    this.showOverlapPrompt(overlap);
+  },
+
+  showOverlapPrompt(overlap) {
+    const host = document.getElementById('modal-host');
+    host.innerHTML = `<div class="overlay" id="overlay">
+      <div class="modal">
+        <div class="modal-head"><h3 style="margin:0">Plan overlap</h3><button class="icon-btn" id="overlap-x">${Icon.x}</button></div>
+        <div class="modal-body"><p>This covered ${H.esc(overlap.day)}'s planned ${H.esc(overlap.topic)} — mark it complete, or keep these separate?</p></div>
+        <div class="modal-foot">
+          <button class="btn btn-secondary" id="keep-separate">Keep separate</button>
+          <button class="btn btn-primary" id="mark-complete">Mark complete</button>
+        </div>
+      </div></div>`;
+    const close = () => { host.innerHTML = ''; };
+    document.getElementById('overlap-x').onclick = () => { close(); location.hash = '#/dashboard'; };
+    document.getElementById('keep-separate').onclick = () => { close(); this.askAlwaysPreference('separate', overlap); };
+    document.getElementById('mark-complete').onclick = () => {
+      AdaptivePrep.markPlannedDayComplete(overlap.day);
+      close();
+      this.askAlwaysPreference('mark', overlap);
+    };
+  },
+
+  askAlwaysPreference(choice) {
+    const host = document.getElementById('modal-host');
+    host.innerHTML = `<div class="overlay" id="overlay">
+      <div class="modal">
+        <div class="modal-head"><h3 style="margin:0">Save preference?</h3></div>
+        <div class="modal-body"><p>Always handle early completion this way?</p></div>
+        <div class="modal-foot">
+          <button class="btn btn-secondary" id="pref-no">No</button>
+          <button class="btn btn-primary" id="pref-yes">Yes</button>
+        </div>
+      </div></div>`;
+    document.getElementById('pref-no').onclick = () => { host.innerHTML = ''; location.hash = '#/dashboard'; };
+    document.getElementById('pref-yes').onclick = () => {
+      AdaptivePrep.setEarlyCompletionPreference(choice);
+      host.innerHTML = '';
+      location.hash = '#/dashboard';
     };
   },
 
@@ -524,9 +605,8 @@ window.Views['take-quiz'] = {
         clearInterval(this.timer);
         this.quiz.questions.forEach(q => { if (this.hasResponse(q)) this.graded[q.id] = true; });
         const score = this.score();
-        if (adaptiveDaily) {
-          AdaptivePrep.markDailyComplete(score);
-        } else if (fridayCheckpoint) {
+        this.logActivity(score);
+        if (fridayCheckpoint) {
           AdaptivePrep.markCheckpointComplete(score);
         }
         this.scorecardVisible = true;

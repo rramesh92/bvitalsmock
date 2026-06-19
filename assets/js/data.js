@@ -62,7 +62,13 @@ window.AdaptivePrep = (function () {
     checkpoint_score: null,
     confidence_delta: 0,
     replan_seen: false,
-    share_with_admin: false
+    share_with_admin: false,
+    activity_log: [],
+    early_completion_preference: null,
+    plan_edits: {},
+    day_order: [],
+    custom_quiz_topics: [],
+    dismissed_ai_suggestions: []
   };
 
   function read() {
@@ -96,6 +102,21 @@ window.AdaptivePrep = (function () {
         daily_mastery_delta: Math.max(st.daily_mastery_delta || 0, 4)
       });
     },
+    recordActivity(activity) {
+      const st = read();
+      const next = (st.activity_log || []).concat(Object.assign({
+        id: Date.now(),
+        day: todayKey(),
+        taken_at: new Date().toISOString()
+      }, activity || {}));
+      return update({ activity_log: next });
+    },
+    markPlannedDayComplete(day) {
+      const st = read();
+      const key = String(day || '').toLowerCase();
+      const days = st.completed_days.includes(key) ? st.completed_days : st.completed_days.concat(key);
+      return update({ completed_days: days });
+    },
     markCheckpointComplete(score) {
       return update({
         checkpoint_complete: true,
@@ -105,6 +126,33 @@ window.AdaptivePrep = (function () {
     },
     markReplanSeen() { return update({ replan_seen: true }); },
     setShareWithAdmin(value) { return update({ share_with_admin: !!value }); },
+    setEarlyCompletionPreference(value) {
+      return update({ early_completion_preference: value || null });
+    },
+    setPlanDayTopics(day, topics) {
+      const st = read();
+      const edits = Object.assign({}, st.plan_edits || {});
+      const clean = (topics || []).map(t => String(t).trim()).filter(Boolean);
+      edits[day] = Object.assign({}, edits[day] || {}, { topics: clean, student_edited: true });
+      return update({ plan_edits: edits });
+    },
+    movePlanDay(day, direction, baseDays) {
+      const st = read();
+      const current = (st.day_order && st.day_order.length ? st.day_order : baseDays).slice();
+      const i = current.indexOf(day);
+      const j = direction === 'up' ? i - 1 : i + 1;
+      if (i < 0 || j < 0 || j >= current.length) return st;
+      [current[i], current[j]] = [current[j], current[i]];
+      return update({ day_order: current });
+    },
+    setCustomQuizTopics(topics) {
+      return update({ custom_quiz_topics: (topics || []).map(t => String(t).trim()).filter(Boolean) });
+    },
+    dismissAiSuggestion(id) {
+      const st = read();
+      const dismissed = st.dismissed_ai_suggestions || [];
+      return dismissed.includes(id) ? st : update({ dismissed_ai_suggestions: dismissed.concat(id) });
+    },
     reset() { return write(Object.assign({}, defaults)); }
   };
 })();
